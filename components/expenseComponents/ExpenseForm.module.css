@@ -1,0 +1,124 @@
+.form {
+    width: 100%;
+    padding: 1rem;
+    border-radius: 5px;
+    /* background-color: white; */
+    height: inherit;
+    /* margin: ; */
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    justify-content: space-between;
+    box-sizing: border-box;
+    gap: 5px;
+    @media (max-width: 550px) {
+      grid-template-columns: 1fr;
+      grid-column: span 2;
+      height: max-content;
+    }
+  }
+  .inputContainer {
+    width: 100%;
+    /* padding: 1rem; */
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    width: 100%;
+    height: -webkit-fill-available;
+    align-items: stretch;
+    justify-content: stretch;
+  }
+  .input {
+    height: 100%;
+    font-size: 1rem;
+    padding: 5px 5px;
+    border: 0;
+    box-sizing: border-box;
+    background: aliceblue;
+    border: 1px solid lightgrey;
+    border-radius: 1rem;
+  }
+  .button {
+    background-color: cornflowerblue;
+    color: white;
+    border: 0;
+    border-radius: 5px;
+    height: -webkit-fill-available;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    @media (max-width: 550px) {
+      height: 3rem;
+    }
+  }
+  .minimizeForm {
+    width: 100%;
+    padding: 1rem;
+    box-sizing: border-box;
+    border-radius: 5px;
+    align-items: start;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: space-between;
+    gap: 5px;
+    height: inherit;
+    justify-content: space-between;
+    @media (max-width: 550px) {
+      grid-template-columns: 1fr;
+      grid-column: span 2;
+      height: max-content;
+    }
+  }
+  .CloseIcon {
+    /* grid-column: span 2; */
+  }
+  .dateInput {
+    width: min-content;
+    justify-self: end;
+    border: 0;
+  }
+  .dateInputDark {
+    width: min-content;
+    justify-self: end;
+    border: 0;
+    filter: invert(1);
+    background: white;
+    color: black;
+  }
+  .moneyImage {
+    grid-column: span 2;
+    width: 100%;
+    height: 100%;
+    /* background-image: url("../../Images/moneyImage.png"); */
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+  .income {
+    padding: 0.5rem;
+    border-radius: 1rem;
+    background-color: #53e373;
+    color: white;
+    height: -webkit-fill-available;
+    font-weight: bold;
+    border: 0;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    position: relative;
+    gap: 5px;
+  }
+  .expense {
+    padding: 0.5rem;
+    border-radius: 1rem;
+    background-color: #fa6467;
+    color: white;
+    height: -webkit-fill-available;
+    font-weight: bold;
+    border: 0;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+  }
+  

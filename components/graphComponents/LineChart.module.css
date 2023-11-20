@@ -1,0 +1,36 @@
+.container {
+  padding: 1rem;
+  box-sizing: border-box;
+  border-radius: 1rem;
+  margin: 1rem 0rem;
+  width: 100% !important;
+  /* height: 30vw; */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.invert {
+  filter: invert(1);
+  background-color: white;
+}
+.header {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+.button {
+  padding: 5px;
+  background-color: transparent;
+  border: none;
+  box-sizing: border-box;
+  color: inherit;
+}
+.active {
+  border-bottom: 3px solid cornflowerblue;
+  color: cornflowerblue;
+}
+.options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}

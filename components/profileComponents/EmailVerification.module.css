@@ -1,0 +1,66 @@
+.main {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 1rem;
+    display: grid;
+    grid-template-columns: 5fr 4fr;
+    /* background-color: orange; */
+    gap: 1rem;
+    height: 75vh;
+    @media (max-width:500px) {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+  .left {
+    /* background-color: cadetblue; */
+    background-image: url('../../images/emailVerificationImage.png');
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    @media (max-width:500px) {
+      height: 30vh;
+    }
+  
+  }
+  .right {
+    /* background-color: bisque; */
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .header {
+    font-weight: bold;
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    color: dimgray;
+  }
+  .prompt {
+    font-weight: 1.5rem;
+  }
+  .verifyButton{
+      background-color: salmon;
+      padding: 1rem;
+      color: white;
+      font-size: 1.2rem;
+      border: 0;
+      border-radius: 1rem;
+      width: 50%;
+      text-transform: capitalize;
+      font-weight:400;
+      box-shadow: 2px 3px 5px #9c6f6a;
+  }
+  
+  .message{
+      color: dimgray;
+      margin-top: 1rem;
+  }
+  .doneButton{
+      position: relative;
+      background: transparent;
+      border: none;
+      color: blue;
+      text-decoration: underline;
+  }
