@@ -11,7 +11,6 @@ const updateAsync = createAsyncThunk(
         photoUrl: payload.photoUrl,
         returnSecureToken: true,
       };
-      console.log(updateBody);
       const response = await fetch(
         `https://identitytoolkit.googleapis.com/v1/accounts:update?key=AIzaSyBwDAFOT_zame9LlDjzKtYXl5OtCBMGBl0`,
         {
@@ -28,7 +27,6 @@ const updateAsync = createAsyncThunk(
         throw new Error("Oops! Something Went Wrong");
       }
       const data = await response.json();
-      console.log(data);
       dispatch(update(data));
     } catch (error) {
       console.log(error);

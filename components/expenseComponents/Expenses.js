@@ -9,7 +9,6 @@ const Expenses = React.forwardRef((props) => {
   const mode = props.mode;
   const sort = props.sort;
   const length = props.length;
-  console.log(length);
   const dark = useSelector((state) => state.theme.dark);
   const transactions = useSelector((state) => state.transaction.transactions);
 
@@ -64,13 +63,14 @@ const Expenses = React.forwardRef((props) => {
         {!!!length &&
           sortedAndFilteredTransactions.map((item) => (
             <ExpenseItem
-              key={item.id}
-              amount={item.amount}
-              description={item.description}
-              details={item.type === "income" ? item.source : item.category}
-              date={item.date}
-              id={item.id}
-              type={item.type}
+            key={item.id}
+            amount={item.amount}
+            description={item.description}
+            date={item.date}
+            id={item.id}
+            type={item.type}
+            category={item.type === "expense" && item.category}
+            source={item.type === "income" && item.source}
             />
           ))}
         {!!length &&
@@ -79,10 +79,11 @@ const Expenses = React.forwardRef((props) => {
               key={item.id}
               amount={item.amount}
               description={item.description}
-              details={item.type === "income" ? item.source : item.category}
               date={item.date}
               id={item.id}
               type={item.type}
+              category={item.type === "expense" && item.category}
+              source={item.type === "income" && item.source}
             />
           ))}
       </div>

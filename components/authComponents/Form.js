@@ -90,7 +90,7 @@ const Form = (props) => {
       mode: "login",
     };
     const resp = await dispatch(loginAsync(loginData));
-    console.log(resp);
+    // console.log(resp);
     await setResponse({ message: response.message, status: "failed" });
     if (resp.payload.status === "failed") {
       setResponse(resp.payload);

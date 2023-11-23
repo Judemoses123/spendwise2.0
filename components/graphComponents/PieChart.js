@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 ChartJs.register(ArcElement, Tooltip, Legend);
 const PieChart = (props) => {
   const transactions = useSelector((state) => state.transaction.transactions);
-  console.log(transactions);
+  // console.log(transactions);
   const [categoryExpenses, setCategoryExpenses] = useState({});
   const [sortedCategoryExpenses, setSortedCategoryExpenses] = useState({});
   const [labels, setLabel] = useState([]);
@@ -20,25 +20,19 @@ const PieChart = (props) => {
 
     expenses.forEach((element) => {
       const { category, amount } = element;
-
-      // Use nullish coalescing operator for concise default value assignment
       map[category] = (map[category] ?? 0) + Number(amount);
     });
-    console.log(map);
     const arr = Object.keys(map).map((category) => ({
       category,
       totalAmount: map[category],
     }));
-    console.log(arr);
     return arr;
   };
 
   useEffect(() => {
     const arr = getCategoryExpenses();
     const labels = arr.map((item) => item.category);
-    console.log(labels);
     const amount = arr.map((item) => item.totalAmount);
-    console.log(amount);
     setLabel(labels);
     setAmount(amount);
   }, []);

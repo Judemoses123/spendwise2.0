@@ -1,6 +1,5 @@
 import { useRef, useState, useEffect} from "react";
 import { useDispatch , useSelector } from "react-redux";
-// import { useNavigate } from "react-router-dom";
 import style from './UpdateProfile.module.css';
 import updateAsync from "../../Store/asyncThunk/updateAsync";
 import PersonIcon from "@mui/icons-material/Person";
@@ -8,12 +7,9 @@ import ImageIcon from "@mui/icons-material/Image";
 import { useRouter } from "next/router";
 import getTransactionAsync from "@/Store/asyncThunk/getTransactionAsync";
 const UpdateForm = () => {
-  // const AuthCTX = useContext(AuthContext);
   const nameInputRef = useRef();
   const photoUrlInputRef = useRef();
   const [error, setError] = useState("");
-  // const ProfileCTX = useContext(ProfileContext);
-//   const navigate = useNavigate();
 const router= useRouter();
   const dispatch = useDispatch();
   const idToken = useSelector((state) => state.auth.idToken);
@@ -38,10 +34,7 @@ const router= useRouter();
       setError("Oops! You missed a required field.");
       return;
     }
-    // ProfileCTX.update(updateData);
-    console.log(updateData);
     dispatch(updateAsync(updateData));
-    // navigate("/home");
     router.push('/dashboard');
   };
 

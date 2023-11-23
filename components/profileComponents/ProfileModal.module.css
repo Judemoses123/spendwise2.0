@@ -1,6 +1,6 @@
 .modal {
     background: white;
-    box-shadow: 1px 1px 10px grey;
+    /* box-shadow: 1px 1px 10px grey; */
     border-radius: 1.5rem;
     border: 1px solid lightgray;
     position: absolute;

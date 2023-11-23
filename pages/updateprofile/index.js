@@ -2,7 +2,6 @@ import Section from "@/components/uiComponents/Section";
 import Navbar from "@/components/navigationComponents/Navbar";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import getExpensesAsync from "../../Store/asyncThunk/getExpensesAsync";
 import UpdateForm from "@/components/profileComponents/UpdateForm";
 import style from './UpdateProfile.module.css';
 import '../../app/globals.css';
@@ -11,9 +10,6 @@ const UpdateProfile = () => {
   const dispatch = useDispatch();
   const userName = useSelector((state) => state.profile.displayName);
 
-  useEffect(() => {
-    dispatch(getExpensesAsync());
-  }, [userName]);
 
   return (
     <>

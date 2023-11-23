@@ -28,8 +28,16 @@ const ProfileModal = (props) => {
   const photoUrl = useSelector((state) => state.profile.photoUrl);
   const emailVerified = useSelector((state) => state.profile.emailVerified);
   const email = useSelector((state) => state.profile.email);
+  const dark = useSelector((state) => state.theme.dark);
   return (
-    <div className={style.modal}>
+    <div
+      className={style.modal}
+      style={{
+        backgroundColor: dark && "black",
+        color: dark && "white",
+        boxShadow: dark && "-1px 1px 5px black",
+      }}
+    >
       <div className={style.main}>
         <div className={style.container}>
           <div
@@ -37,7 +45,7 @@ const ProfileModal = (props) => {
             style={{ backgroundImage: `url(${photoUrl})` }}
           ></div>
           <button onClick={toggleHandler} className={style.close}>
-            <CloseIcon />
+            <CloseIcon style={{ color: dark && "white" }} />
           </button>
         </div>
         <div style={{ fontWeight: "bold" }}>{displayName}</div>
@@ -87,14 +95,4 @@ const ProfileModal = (props) => {
     </div>
   );
 };
-// const ProfileModal = (props) => {
-//   return (
-//     <>
-//       {ReactDOM.createPortal(
-//         <ProfileModalOverlay toggleHandler={props.toggleHandler} />,
-//         document.getElementById("overlay")
-//       )}
-//     </>
-//   );
-// };
 export default ProfileModal;

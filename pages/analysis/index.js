@@ -151,7 +151,6 @@ const calculateFinancialHealthScore = (transactions) => {
     }
     return prev;
   }, 0);
-  console.log(income, expense, savings, investment, debt);
 
   // console.log(weightedSums);
   const score =
@@ -162,8 +161,5 @@ const calculateFinancialHealthScore = (transactions) => {
       0.3 * debt) /
       (0.25 * income + 0.2 * savings + 0.2 * investment)) *
     100;
-  console.log(score);
-
-  console.log(score);
   return score.toFixed(2);
 };

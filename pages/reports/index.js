@@ -84,7 +84,6 @@ const Reports = () => {
   };
 
   const clickHandler = (data) => {
-    console.log(data);
     if (data.fileType === "pdf") {
       printHandler();
     }
@@ -94,14 +93,8 @@ const Reports = () => {
   };
 
   const getData = (data) => {
-    console.log(data);
-    // printHandler();
     return data;
   };
-
-//   useEffect(() => {
-//     setSortedData(getData());
-//   }, [sortedData]);
 
   return (
     <>

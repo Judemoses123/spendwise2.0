@@ -6,13 +6,11 @@ import { toggleDark } from "../Reducers/themeSlice";
 const getDarkAsync = createAsyncThunk(
   "profile/getDarkAsync",
   async (payload, { dispatch, getState }) => {
-    console.log("hi");
     const username = getState().profile.displayName;
     const email = getState().auth.email;
     if (username) {
       try {
         const hashCode = createHash("sha1").update(email).digest("hex");
-        console.log(hashCode);
         const response = await fetch(
           `https://spendwise-client-default-rtdb.firebaseio.com/users/${hashCode}/theme.json`
         );

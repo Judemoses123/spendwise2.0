@@ -26,7 +26,7 @@ const ReportComponents = (props) => {
       </div>
       <button onClick={clickHandler} className={style.button}>
         <div className={style.btn_left}>Download</div>
-        <ArrowDownwardIcon className={style.btn_right} F />
+        <ArrowDownwardIcon className={style.btn_right} />
       </button>
     </div>
   );

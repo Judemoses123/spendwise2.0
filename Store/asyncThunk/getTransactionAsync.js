@@ -10,7 +10,6 @@ const getTransactionAsync = createAsyncThunk(
       try {
         const shortenedUsername = username.replace(" ", "");
         const hashCode = createHash("sha1").update(email).digest("hex");
-        console.log(hashCode);
         const response = await fetch(
           `https://spendwise-client-default-rtdb.firebaseio.com/users/${hashCode}/transactions.json`
         );
