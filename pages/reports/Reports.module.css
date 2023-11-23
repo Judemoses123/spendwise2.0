@@ -51,6 +51,7 @@
   flex-direction: row;
   height: 100%;
   overflow-x: hidden !important;
+  overflow-y: hidden;
   @media (max-width: 500px) {
     flex-direction: column-reverse;
   }
@@ -67,31 +68,73 @@
 }
 .right {
   overflow-x: hidden;
+  overflow-y: hidden;
   height: 100vh;
   box-sizing: border-box;
   width: 100%;
 }
 
-.expenses {
-  /* height: 50vh; */
-  overflow: hidden;
-}
-.line {
+.controls {
   width: 100%;
-  height: min-content;
-  justify-content: center;
-}
-.utilities {
-  width: inherit !important;
-  justify-content: center;
-  display: flex;
-}
-.expenseInfoBar {
+  background-color: white;
+  /* border-radius: 5px; */
   display: flex;
   flex-direction: row;
-  align-items: center;
   justify-content: space-between;
-  width: 100%;
-  /* background-color: red; */
-  padding-bottom: 1rem;
+  padding: 1rem;
+  box-sizing: border-box;
+  border-bottom: 1px solid lightgray;
+  @media (max-width: 500px) {
+    flex-direction: column;
+    gap: 1rem;
+  }
+}
+.type {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1rem;
+}
+.typeButtons {
+  background-color: transparent;
+  border: none;
+  font-weight: bold;
+  text-align: center;
+  padding: 5px 8px;
+  color: inherit;
+}
+.active {
+  border-bottom: 3px solid cornflowerblue;
+  color: cornflowerblue;
+}
+.activeIncome {
+  border-bottom: 3px solid #53e373;
+  color: #53e373;
+}
+.activeExpenses {
+  border-bottom: 3px solid #fa6467;
+  color: #fa6467;
+}
+.sort {
+  padding: 5px;
+  border-radius: 5px;
+}
+.controlsRight {
+  display: grid;
+  /* grid-template-columns: 2fr 1fr; */
+  gap: 1rem;
+}
+.filterButton {
+  border: 1px solid cornflowerblue;
+  color: cornflowerblue;
+  background-color: transparent;
+  border-radius: 5px;
+  letter-spacing: 1px;
+  /* font-weight: bold; */
+}
+.main {
+  display: flex;
+}
+.expenses {
+  height: calc(100vh - 11rem);
+  overflow: auto;
 }

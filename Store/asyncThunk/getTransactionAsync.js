@@ -1,15 +1,18 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { getTransaction } from "../Reducers/transactionSlice";
-
+import { createHash, getHashes } from "crypto";
 const getTransactionAsync = createAsyncThunk(
   "transaction/getTransactionAsync",
   async (payload, { dispatch, getState }) => {
     const username = getState().profile.displayName;
+    const email= getState().auth.email;
     if (!!username) {
       try {
         const shortenedUsername = username.replace(" ", "");
+        const hashCode = createHash("sha1").update(email).digest("hex");
+        console.log(hashCode);
         const response = await fetch(
-          `https://spendwise-client-default-rtdb.firebaseio.com/users/${shortenedUsername}/transactions.json`
+          `https://spendwise-client-default-rtdb.firebaseio.com/users/${hashCode}/transactions.json`
         );
 
         if (!response.ok) {

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import style from "./Navbar.module.css";
 import MenuIcon from "@mui/icons-material/Menu";
 import ProfileModal from "../profileComponents/ProfileModal";
@@ -7,6 +7,8 @@ import { toggleDark } from "../../Store/Reducers/themeSlice";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import { useRouter } from "next/router";
+import toggleDarkAsync from "@/Store/asyncThunk/toggleDarkAsync";
+import getDarkAsync from "@/Store/asyncThunk/getDarkAsync";
 const Navbar = () => {
   const isPremium = useSelector((state) => state.profile.isPremium);
   const router = useRouter();
@@ -14,16 +16,21 @@ const Navbar = () => {
   // console.log(router.asPath);
   const [showProfileModal, setShowProfileModal] = useState(false);
   const dispatch = useDispatch();
+  dispatch(getDarkAsync());
   const toggleShowProfileModal = () => {
     setShowProfileModal((prev) => !prev);
   };
   const toggleTheme = () => {
-    dispatch(toggleDark());
+    dispatch(toggleDarkAsync(!dark));
   };
+
   const photoUrl = useSelector((state) => state.profile.photoUrl);
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const displayName = useSelector((state) => state.profile.displayName);
   const dark = useSelector((state) => state.theme.dark);
+  useEffect(() => {
+    dispatch(getDarkAsync());
+  }, [dark]);
   return (
     <div className={dark ? style.navbarBodyDark : style.navbarBody}>
       <ul className={style.navbarList}>
@@ -60,7 +67,10 @@ const Navbar = () => {
         {!!photoUrl &&
           !!displayName &&
           isLoggedIn &&
-          location.pathname === "/dashboard" && (
+          (location.pathname === "/dashboard" ||
+            location.pathname === "/transactions" ||
+            location.pathname === "/analysis" ||
+            location.pathname === "/reports") && (
             <div
               className={style.profile}
               style={{

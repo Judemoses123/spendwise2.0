@@ -1,6 +1,6 @@
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { useEffect, useState } from "react";
-import { format, startOfWeek, endOfWeek, subDays } from "date-fns";
+import { format } from "date-fns";
 import style from "./LineChart.module.css";
 import { Line } from "react-chartjs-2";
 import {
@@ -13,17 +13,18 @@ import {
 
 ChartJS.register(LineElement, CategoryScale, LinearScale, PointElement);
 
-const LineChart = () => {
+function getMonthLength(monthNumber) {
+  if (monthNumber < 1 || monthNumber > 12) {
+    return "Invalid month number";
+  }
+  const daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+  return daysInMonth[monthNumber - 1];
+}
+const LineChart = (props) => {
   const dark = useSelector((state) => state.theme.dark);
+  const transactions = useSelector((state) => state.transaction.transactions);
 
   const [mode, setMode] = useState("week");
-  const monthHandler = () => {
-    setMode("month");
-  };
-  const weekHandler = () => {
-    setMode("week");
-  };
-
   const [expenseData, setExpenseData] = useState([0, 0, 0, 0, 0, 0, 0]);
   const [incomeData, setIncomeData] = useState([0, 0, 0, 0, 0, 0, 0]);
   const [maxValue, setMaxValue] = useState(0);
@@ -32,156 +33,145 @@ const LineChart = () => {
   const [monthlyExpenseData, setMonthlyExpenseData] = useState([]);
   const [montlyMaxExpenseValue, setMontlyMaxExpenseValue] = useState(0);
   const [montlyMaxIncomeValue, setMontlyMaxIncomeValue] = useState(0);
-  const transactions = useSelector((state) => state.transaction.transactions);
-  const getWeeklyExpenseData = () => {
-    if (!!!transactions) return;
+  const [stats, setStats] = useState(0);
+  const weekHandler = () => setMode("week");
+  const monthHandler = () => setMode("month");
+  const [totalWeeklyIncome, setTotalWeeklyIncome] = useState(0);
+  const [totalWeeklyExpense, setTotalWeeklyExpense] = useState(0);
+  const [totalMonthlyIncome, setTotalMonthlyIncome] = useState(0);
+  const [totalMonthlyExpense, setTotalMonthlyExpense] = useState(0);
+  const getWeeklyData = (type) => {
     const today = new Date();
-    const mondayBefore = new Date();
-    if (today.getDay() === 1) {
-      mondayBefore.setDate(today.getDate());
-    } else {
-      mondayBefore.setDate(today.getDate() - ((today.getDay() + 6) % 7));
-    }
+    const mondayBefore = new Date(today);
+    mondayBefore.setDate(today.getDate() - ((today.getDay() + 6) % 7));
 
-    const weeklyData = [];
+    const weeklyData = Array(7).fill(0);
     let maxValue = 0;
+    let expense = 0;
+    let income = 0;
     for (let i = 0; i < 7; i++) {
-      const searchDate = new Date();
+      const searchDate = new Date(mondayBefore);
       searchDate.setDate(mondayBefore.getDate() + i);
+
       const value = transactions.reduce((prev, curr) => {
         const currDate = new Date(curr.date);
         if (
-          searchDate.getDate() == currDate.getDate() &&
+          searchDate.getDate() === currDate.getDate() &&
           searchDate.getMonth() === currDate.getMonth() &&
           searchDate.getFullYear() === currDate.getFullYear() &&
-          curr.type === "expense"
+          curr.type === type
         ) {
           return prev + Number(curr.amount);
         }
         return prev;
       }, 0);
-      weeklyData.push(value);
+      if (type == "expense") expense += Number(value);
+      if (type == "income") income += Number(value);
+
+      weeklyData[i] = value;
       maxValue = Math.max(value, maxValue);
     }
-    setMaxValue(maxValue);
-    return weeklyData;
+    // setTotalWeeklyExpense(expense);
+    // console.log(expense);
+    // setTotalWeeklyIncome(income);
+    // console.log(income);
+
+    return {
+      data: weeklyData,
+      max: maxValue,
+      expense: expense,
+      income: income,
+    };
   };
 
-  const getWeeklyIncomeData = () => {
-    if (!!!transactions) return;
+  const getMonthlyData = (type) => {
     const today = new Date();
-    const mondayBefore = new Date();
-    console.log(today.getDay());
-    if (today.getDay() === 1) {
-      mondayBefore.setDate(today.getDate());
-    } else {
-      mondayBefore.setDate(today.getDate() - ((today.getDay() + 6) % 7));
-    }
-    console.log(today);
-    console.log(mondayBefore);
-    const weeklyData = [];
-    let maxValue = 0;
-    for (let i = 0; i < 7; i++) {
-      const searchDate = new Date();
-      searchDate.setDate(mondayBefore.getDate() + i);
-      const value = transactions.reduce((prev, curr) => {
-        const currDate = new Date(curr.date);
-        if (
-          searchDate.getDate() == currDate.getDate() &&
-          searchDate.getMonth() === currDate.getMonth() &&
-          searchDate.getFullYear() === currDate.getFullYear() &&
-          curr.type === "income"
-        ) {
-          return prev + Number(curr.amount);
-        }
-        return prev;
-      }, 0);
-      weeklyData.push(value);
-      maxValue = Math.max(value, maxValue);
-    }
-    setMaxIncomeValue(maxValue);
-    return weeklyData;
-  };
-
-  //-----------------------------------------
-  const getMonthlyExpenseData = () => {
-    if (!!!transactions) return;
-    const today = new Date();
-    const firstOfMonth = new Date();
-    if (today.getDate() === 1) {
-      firstOfMonth.setDate(today.getDate());
-    } else {
-      firstOfMonth.setDate(today.getDate() - today.getDate() + 1);
-    }
+    const firstOfMonth = new Date(today);
+    firstOfMonth.setDate(today.getDate() - today.getDate() + 1);
 
     const monthlyData = [];
     let maxValue = 0;
-    const searchDate = new Date();
-    searchDate.setDate(firstOfMonth.getDate());
-    while (searchDate.getMonth() == today.getMonth()) {
+    const searchDate = new Date(firstOfMonth);
+    let expense = 0;
+    let income = 0;
+    while (searchDate.getMonth() === today.getMonth()) {
       const value = transactions.reduce((prev, curr) => {
         const currDate = new Date(curr.date);
         if (
-          searchDate.getDate() == currDate.getDate() &&
+          searchDate.getDate() === currDate.getDate() &&
           searchDate.getMonth() === currDate.getMonth() &&
           searchDate.getFullYear() === currDate.getFullYear() &&
-          curr.type === "expense"
+          curr.type === type
         ) {
           return prev + Number(curr.amount);
         }
         return prev;
       }, 0);
+
+      if (type == "expense") expense += Number(value);
+      if (type == "income") income += Number(value);
       monthlyData.push(value);
       maxValue = Math.max(value, maxValue);
       searchDate.setDate(searchDate.getDate() + 1);
     }
-    console.log(monthlyData);
-    setMontlyMaxExpenseValue(maxValue);
-    return monthlyData;
-  };
+    // setTotalMonthlyExpense(expense);
+    // console.log(totalMonthlyExpense);
+    // setTotalMonthlyIncome(income);
+    // console.log(totalMonthlyIncome);
 
-  const getMonthlyIncomeData = () => {
-    if (!!!transactions) return;
-    const today = new Date();
-    const firstOfMonth = new Date();
-    if (today.getDate() === 1) {
-      firstOfMonth.setDate(today.getDate());
-    } else {
-      firstOfMonth.setDate(today.getDate() - today.getDate() + 1);
-    }
-
-    const monthlyData = [];
-    let maxValue = 0;
-    const searchDate = new Date();
-    searchDate.setDate(firstOfMonth.getDate());
-    while (searchDate.getMonth() == today.getMonth()) {
-      const value = transactions.reduce((prev, curr) => {
-        const currDate = new Date(curr.date);
-        if (
-          searchDate.getDate() == currDate.getDate() &&
-          searchDate.getMonth() === currDate.getMonth() &&
-          searchDate.getFullYear() === currDate.getFullYear() &&
-          curr.type === "income"
-        ) {
-          return prev + Number(curr.amount);
-        }
-        return prev;
-      }, 0);
-      monthlyData.push(value);
-      maxValue = Math.max(value, maxValue);
-      searchDate.setDate(searchDate.getDate() + 1);
-    }
-    console.log(monthlyData);
-    setMontlyMaxIncomeValue(maxValue);
-    return monthlyData;
+    return {
+      data: monthlyData,
+      max: maxValue,
+      expense: expense,
+      income: income,
+    };
   };
 
   useEffect(() => {
-    setExpenseData(getWeeklyExpenseData());
-    setIncomeData(getWeeklyIncomeData());
-    setMonthlyIncomeData(getMonthlyIncomeData());
-    setMonthlyExpenseData(getMonthlyExpenseData());
+    if (!transactions) return;
+
+    const {
+      data: weeklyExpenseData,
+      max: maxExpenseValue,
+      expense: totalWeeklyExpense,
+      income: dummyWeeklyIncome,
+    } = getWeeklyData("expense");
+    const {
+      data: weeklyIncomeData,
+      max: maxIncomeValue,
+      expense: dummyWeeklyExpense,
+      income: totalWeeklyIncome,
+    } = getWeeklyData("income");
+
+    setExpenseData(weeklyExpenseData);
+    setIncomeData(weeklyIncomeData);
+    setMaxValue(maxExpenseValue);
+    setMaxIncomeValue(maxIncomeValue);
+    setTotalWeeklyExpense(totalWeeklyExpense);
+    setTotalWeeklyIncome(totalWeeklyIncome);
+
+    const {
+      data: monthlyExpenseData,
+      max: montlyMaxExpenseValue,
+      expense: totalMonthlyExpense,
+      income: dummyMonthlyIncome,
+    } = getMonthlyData("expense");
+    const {
+      data: monthlyIncomeData,
+      max: montlyMaxIncomeValue,
+      expense: dummyMonthlyExpense,
+      income: totalMonthlyIncome,
+    } = getMonthlyData("income");
+
+    setMonthlyExpenseData(monthlyExpenseData);
+    setMonthlyIncomeData(monthlyIncomeData);
+    setMontlyMaxExpenseValue(montlyMaxExpenseValue);
+    setMontlyMaxIncomeValue(montlyMaxIncomeValue);
+    setTotalMonthlyExpense(totalMonthlyExpense);
+    setTotalMonthlyIncome(totalMonthlyIncome);
+    setStats(getStats());
   }, [transactions]);
+
   const data = {
     labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
     datasets: [
@@ -206,49 +196,12 @@ const LineChart = () => {
     ],
   };
 
-  function getMonthLength(monthNumber) {
-    if (monthNumber < 1 || monthNumber > 12) {
-      return "Invalid month number";
-    }
-    const daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-    return daysInMonth[monthNumber];
-  }
-
   const today = new Date();
-  const length = getMonthLength(today.getMonth());
-  const monthArray = [
-    "1",
-    "2",
-    "3",
-    "4",
-    "5",
-    "6",
-    "7",
-    "8",
-    "9",
-    "10",
-    "11",
-    "12",
-    "13",
-    "14",
-    "15",
-    "16",
-    "17",
-    "18",
-    "19",
-    "20",
-    "21",
-    "22",
-    "23",
-    "24",
-    "25",
-    "26",
-    "27",
-    "28",
-    "29",
-    "30",
-    "31",
-  ].slice(0, length);
+  const monthArray = Array.from(
+    { length: getMonthLength(today.getMonth()) },
+    (_, i) => (i + 1).toString()
+  );
+
   const monthlyData = {
     labels: monthArray,
     datasets: [
@@ -273,6 +226,21 @@ const LineChart = () => {
     ],
   };
 
+  const options = {
+    plugins: {
+      legend: true,
+    },
+    scales: {
+      y: {
+        min: 0,
+        max: Math.max(maxValue, maxIncomeValue),
+      },
+    },
+    responsive: true,
+    aspectRatio: 4,
+    maintainAspectRatio: true,
+  };
+
   const monthlyOptions = {
     plugins: {
       legend: true,
@@ -287,23 +255,12 @@ const LineChart = () => {
     aspectRatio: 4,
     maintainAspectRatio: true,
   };
-  const weeklyOptions = {
-    plugins: {
-      legend: true,
-    },
-    scales: {
-      y: {
-        min: 0,
-        max: Math.max(maxValue, maxIncomeValue),
-      },
-    },
-    responsive: true,
-    aspectRatio: 4,
-    maintainAspectRatio: true,
+  const getStats = () => {
+    const income = mode === "week" ? totalWeeklyIncome : totalMonthlyIncome;
+    const expense = mode === "week" ? totalWeeklyExpense : totalMonthlyExpense;
+    return income - expense;
   };
-  console.log(maxValue);
-  console.log(expenseData);
-  console.log(incomeData);
+
   return (
     <div
       className={`${style.container}`}
@@ -314,7 +271,11 @@ const LineChart = () => {
     >
       <div className={style.header}>
         <span>
-          <b>Total Stats</b>{" "}
+          <b>Total Stats</b> &nbsp;
+          <b style={{ color: getStats() >= 0 ? "green" : "salmon" }}>
+            {getStats() >= 0 ? "+" : "-"}
+            {Math.abs(getStats())}&#8377;
+          </b>{" "}
         </span>
         <div className={style.options}>
           <button
@@ -332,11 +293,14 @@ const LineChart = () => {
         </div>
       </div>
       <Line
-        className={dark && style.invert}
+        className={`${dark && style.invert} ${
+          props.className && props.className
+        }`}
         data={mode === "week" ? data : monthlyData}
-        options={mode === "week" ? weeklyOptions : monthlyOptions}
+        options={mode === "week" ? options : monthlyOptions}
       ></Line>
     </div>
   );
 };
+
 export default LineChart;

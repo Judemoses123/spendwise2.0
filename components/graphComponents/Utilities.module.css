@@ -3,6 +3,20 @@
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
   gap: 1rem;
+  width: inherit;
+  height: inherit;
+  @media (max-width: 500px) {
+    grid-template-columns: 1fr 1fr;
+    height: max-content;
+  }
+}
+.wrapperWithoutForm {
+  /* background-color: orange; */
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 1rem;
+  width: 100%;
+
   @media (max-width: 500px) {
     grid-template-columns: 1fr 1fr;
     height: max-content;

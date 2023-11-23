@@ -1,19 +1,20 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { getPremiumState } from "../Reducers/profileSlice";
 import { createHash } from "crypto";
+import { toggleDark } from "../Reducers/themeSlice";
 
-const getPremiumStateAsync = createAsyncThunk(
-  "profile/getPremiumStateAsync",
+const getDarkAsync = createAsyncThunk(
+  "profile/getDarkAsync",
   async (payload, { dispatch, getState }) => {
+    console.log("hi");
     const username = getState().profile.displayName;
-    const email= getState().auth.email;
+    const email = getState().auth.email;
     if (username) {
       try {
-        const shortenedUsername = username.replace(" ", "");
         const hashCode = createHash("sha1").update(email).digest("hex");
         console.log(hashCode);
         const response = await fetch(
-          `https://spendwise-client-default-rtdb.firebaseio.com/users/${hashCode}/profile.json`
+          `https://spendwise-client-default-rtdb.firebaseio.com/users/${hashCode}/theme.json`
         );
         if (!response.ok) {
           const error = await response.json();
@@ -21,6 +22,11 @@ const getPremiumStateAsync = createAsyncThunk(
           throw new Error("get Premium Failed");
         }
         const data = await response.json();
+        let dark=false;
+        for(let element in data){
+            dark=data[element].dark;
+        }
+        dispatch(toggleDark(dark));
         // dispatch(getPremiumState(data));
       } catch (error) {
         console.log(error);
@@ -28,4 +34,4 @@ const getPremiumStateAsync = createAsyncThunk(
     }
   }
 );
-export default getPremiumStateAsync;
+export default getDarkAsync;

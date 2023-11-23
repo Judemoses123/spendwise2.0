@@ -1,10 +1,11 @@
 .container {
   padding: 1rem;
   box-sizing: border-box;
-  border-radius: 1rem;
+  border-radius: 5px;
   margin: 1rem 0rem;
   width: 100% !important;
-  /* height: 30vw; */
+  height: inherit;
+  width: inherit;
   display: flex;
   flex-direction: column;
   justify-content: center;

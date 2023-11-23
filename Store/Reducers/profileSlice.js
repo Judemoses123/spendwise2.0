@@ -5,7 +5,7 @@ const initialProfileState = {
   displayName: "",
   photoUrl: "",
   emailVerified: false,
-  isPremium: false,
+  isPremium: true,
 };
 
 const profileSlice = createSlice({

@@ -15,6 +15,7 @@ import Utilities from "@/components/graphComponents/Utilities";
 import getTransactionAsync from "../../Store/asyncThunk/getTransactionAsync";
 import LineChart from "@/components/graphComponents/LineChart";
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 const Home = () => {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
@@ -45,25 +46,41 @@ const Home = () => {
   }, []);
 
   return (
-    <>
-      <div className={`${style.root} App ${dark && "dark"}`}>
-        <div className={style.left}>
-          {emailVerified && !!photoUrl && !!userName && <LeftNavbar />}
-        </div>
-        <div className={style.right}>
-          <Navbar />
-          <Section>
-            {(!!!photoUrl || !!!userName) && <ProfileCompletion />}
-            {!emailVerified && !!photoUrl && !!userName && (
-              <EmailVerification />
-            )}
-            {emailVerified && !!photoUrl && !!userName && <Utilities />}
-            {emailVerified && !!photoUrl && !!userName && <LineChart />}
-            {emailVerified && !!photoUrl && !!userName && <Expenses />}
-          </Section>
-        </div>
+    <div className={`${style.root} App ${dark && "dark"}`}>
+      <div className={style.left}>
+        {emailVerified && !!photoUrl && !!userName && <LeftNavbar />}
       </div>
-    </>
+      <div className={style.right}>
+        <Navbar />
+        <Section>
+          {(!!!photoUrl || !!!userName) && <ProfileCompletion />}
+          {!emailVerified && !!photoUrl && !!userName && <EmailVerification />}
+          {emailVerified && !!photoUrl && !!userName && (
+            <div className={style.utilities}>
+              <Utilities showForm={true} />
+            </div>
+          )}
+          {emailVerified && !!photoUrl && !!userName && (
+            <div className={style.line}>
+              <LineChart />
+            </div>
+          )}
+          {emailVerified && !!photoUrl && !!userName && (
+            <Expenses
+              mode="all"
+              sort="date-recent"
+              className={style.expenses}
+              length={5}
+            >
+              <div className={style.expenseInfoBar}>
+                <b>Recent transactions</b>
+                <Link style={{color:'grey'}} href={"/transactions"}>See more</Link>
+              </div>
+            </Expenses>
+          )}
+        </Section>
+      </div>
+    </div>
   );
 };
 

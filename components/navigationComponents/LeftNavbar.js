@@ -11,7 +11,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 const LeftNavbar = () => {
   const [showNavigation, setShowNavigation] = useState(false);
-  const router=useRouter();   
+  const router = useRouter();
   const toggleShow = () => {
     setShowNavigation((prev) => !prev);
   };
@@ -36,12 +36,19 @@ const LeftNavbar = () => {
       </div>
       <div className={style.body}>
         <Link
-          style={{color: (router.asPath=='/dashboard')? "cornflowerblue" : "dimgrey"}}
+          style={{
+            color:
+              router.asPath == "/dashboard"
+                ? "cornflowerblue"
+                : !dark
+                ? "dimgrey"
+                : "white",
+          }}
           href={"/dashboard"}
         >
           <div
             className={!showNavigation ? style.hidepageLink : style.pageLink}
-            style={{ color: dark ? "#ececec" : "" }}
+            // style={{ color: dark ? "#ececec" : "" }}
           >
             <DashboardIcon className={style.icons} />
             <div className={!showNavigation ? style.hidetext : style.text}>
@@ -53,46 +60,19 @@ const LeftNavbar = () => {
           </div>
         </Link>
         <Link
-          style={{color: (router.asPath=='/expenses')? "cornflowerblue" : "dimgrey"}}
-          href={"/expenses"}
+          style={{
+            color:
+              router.asPath == "/transactions"
+                ? "cornflowerblue"
+                : !dark
+                ? "dimgrey"
+                : "white",
+          }}
+          href={"/transactions"}
         >
           <div
             className={!showNavigation ? style.hidepageLink : style.pageLink}
-            style={{ color: dark ? "#ececec" : "" }}
-          >
-            <AttachMoneyIcon className={style.icons} />
-            <div className={!showNavigation ? style.hidetext : style.text}>
-              Expenses
-            </div>
-            <ArrowForwardIosIcon
-              className={!showNavigation ? style.hideforward : style.forward}
-            />
-          </div>
-        </Link>
-        <Link
-          style={{color: (router.asPath=='/analysis')? "cornflowerblue" : "dimgrey"}}
-          href={"/analysis"}
-        >
-          <div
-            className={!showNavigation ? style.hidepageLink : style.pageLink}
-            style={{ color: dark ? "#ececec" : "" }}
-          >
-            <AnalyticsIcon className={style.icons} />
-            <div className={!showNavigation ? style.hidetext : style.text}>
-              Analysis
-            </div>
-            <ArrowForwardIosIcon
-              className={!showNavigation ? style.hideforward : style.forward}
-            />
-          </div>
-        </Link>
-        <Link
-          style={{color: (router.asPath=='/transaction')? "cornflowerblue" : "dimgrey"}}
-          href={"/transaction"}
-        >
-          <div
-            className={!showNavigation ? style.hidepageLink : style.pageLink}
-            style={{ color: dark ? "#ececec" : "" }}
+            // style={{ color: dark ? "#ececec" : "" }}
           >
             <CurrencyExchangeIcon className={style.icons} />
             <div className={!showNavigation ? style.hidetext : style.text}>
@@ -104,12 +84,44 @@ const LeftNavbar = () => {
           </div>
         </Link>
         <Link
-          style={{color: (router.asPath=='/reports')? "cornflowerblue" : "dimgrey"}}
+          style={{
+            color:
+              router.asPath == "/analysis"
+                ? "cornflowerblue"
+                : !dark
+                ? "dimgrey"
+                : "white",
+          }}
+          href={"/analysis"}
+        >
+          <div
+            className={!showNavigation ? style.hidepageLink : style.pageLink}
+            // style={{ color: dark ? "#ececec" : "" }}
+          >
+            <AnalyticsIcon className={style.icons} />
+            <div className={!showNavigation ? style.hidetext : style.text}>
+              Analysis
+            </div>
+            <ArrowForwardIosIcon
+              className={!showNavigation ? style.hideforward : style.forward}
+            />
+          </div>
+        </Link>
+
+        <Link
+          style={{
+            color:
+              router.asPath == "/reports"
+                ? "cornflowerblue"
+                : !dark
+                ? "dimgrey"
+                : "white",
+          }}
           href={"/reports"}
         >
           <div
             className={!showNavigation ? style.hidepageLink : style.pageLink}
-            style={{ color: dark ? "#ececec" : "" }}
+            // style={{ color: dark ? "#ececec" : "" }}
           >
             <ArticleIcon className={style.icons} />
             <div className={!showNavigation ? style.hidetext : style.text}>

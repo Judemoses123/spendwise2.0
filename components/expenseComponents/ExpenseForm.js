@@ -155,7 +155,7 @@ const ExpenseForm = () => {
               style={{ backgroundColor: "salmon" }}
               className={style.button}
             >
-              GET PREMIUM
+              // GET PREMIUM
             </button>
           )}
         </>

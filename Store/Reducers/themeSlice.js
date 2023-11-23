@@ -8,9 +8,10 @@ const themeSlice = createSlice({
   initialState: initialThemeState,
   reducers: {
     toggleDark(state, action) {
-      state.dark = !state.dark;
+      state.dark = action.payload;
     },
+    getDark(state, action) {},
   },
 });
-export const { toggleDark } = themeSlice.actions;
+export const { toggleDark, getDark } = themeSlice.actions;
 export default themeSlice.reducer;

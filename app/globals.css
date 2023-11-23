@@ -18,7 +18,8 @@ body {
   background-size: cover;
   background-repeat: no-repeat;
   z-index: -5;
-  filter: saturate(2);
+  filter: saturate(3);
+  overflow-y: hidden;
 }
 .App {
   overflow-x: hidden;
@@ -26,6 +27,7 @@ body {
   max-height: 100vh;
   height: 100vh;
   box-sizing: border-box;
+  overflow-y: hidden;
 }
 
 .dark {
