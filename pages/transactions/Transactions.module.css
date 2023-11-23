@@ -120,7 +120,6 @@
 }
 .controlsRight {
   display: grid;
-  /* grid-template-columns: 2fr 1fr; */
   gap: 1rem;
 }
 .filterButton {
@@ -129,7 +128,6 @@
   background-color: transparent;
   border-radius: 5px;
   letter-spacing: 1px;
-  /* font-weight: bold; */
 }
 .expenses{
   height: auto;
