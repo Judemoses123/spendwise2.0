@@ -55,7 +55,7 @@
     }
   }
   .logo {
-    background-image: url("../../Images/spendwiseLogoLatest.png");
+    background-image: url("../../images//spendwiseLogoLatest.png");
     /* background-image: url('../../Images/spendwiseLogoSquare.png'); */
     height: 100%;
     background-size: contain;
