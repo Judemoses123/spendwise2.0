@@ -13,12 +13,12 @@ body {
   content: "";
   width: 100%;
   height: -webkit-fill-available;
-  background-image: url("https://img.freepik.com/free-vector/winter-blue-pink-gradient-background-vector_53876-117276.jpg");
+  background-image: url("../images/Microsoft_login_screen.svg.png");
   position: fixed;
   background-size: cover;
   background-repeat: no-repeat;
   z-index: -5;
-  /* filter: saturate(3); */
+  filter: saturate(3);
   overflow-y: hidden;
 }
 .App {
