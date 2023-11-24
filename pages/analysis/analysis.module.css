@@ -94,7 +94,7 @@
 .leftGrid {
   flex: 2.2; /* Adjust this value as needed */
   display: grid;
-  /* grid-template-rows: 1fr 2fr; */
+  grid-template-rows: 1fr 2fr;
   box-sizing: border-box;
 }
 .leftGridMobile {
