@@ -16,6 +16,7 @@ import getTransactionAsync from "../../Store/asyncThunk/getTransactionAsync";
 import LineChart from "@/components/graphComponents/LineChart";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import BottomNavbar from "@/components/navigationComponents/BottomNavbar";
 
 const Home = () => {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
@@ -44,7 +45,7 @@ const Home = () => {
     }
     dispatch(setIdTokenAsync());
   }, []);
-  const [width, setWidth] = useState();
+  const [width, setWidth] = useState(0);
   useEffect(() => {
     console.log(window.innerWidth);
     setWidth(window.innerWidth);
@@ -52,7 +53,9 @@ const Home = () => {
   return (
     <div className={`${style.root} App ${dark && "dark"}`}>
       <div className={style.left}>
-        {emailVerified && !!photoUrl && !!userName && <LeftNavbar />}
+        {width > 500 && emailVerified && !!photoUrl && !!userName && (
+          <LeftNavbar />
+        )}
       </div>
       <div className={style.right}>
         <Navbar />
@@ -86,6 +89,9 @@ const Home = () => {
                 </Link>
               </div>
             </Expenses>
+          )}
+          {width < 500 && emailVerified && !!photoUrl && !!userName && (
+            <BottomNavbar></BottomNavbar>
           )}
         </Section>
       </div>

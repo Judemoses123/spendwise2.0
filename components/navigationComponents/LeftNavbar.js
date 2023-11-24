@@ -10,7 +10,7 @@ import { useSelector } from "react-redux";
 import Link from "next/link";
 import { useRouter } from "next/router";
 const LeftNavbar = () => {
-  const [width, setWidth] = useState();
+  const [width, setWidth] = useState(window.innerWidth);
   useEffect(() => {
     console.log(window.innerWidth);
     setWidth(window.innerWidth);

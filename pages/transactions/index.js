@@ -11,7 +11,7 @@ import LeftNavbar from "@/components/navigationComponents/LeftNavbar";
 import Expenses from "@/components/expenseComponents/Expenses";
 import getTransactionAsync from "../../Store/asyncThunk/getTransactionAsync";
 import { useRouter } from "next/router";
-
+import BottomNavbar from "@/components/navigationComponents/BottomNavbar";
 const Transactions = (props) => {
   const [mode, setMode] = useState("all");
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
@@ -59,17 +59,24 @@ const Transactions = (props) => {
     setMode((prev) => prev);
     setSort(sortRef.current.value);
   };
+  const [width, setWidth] = useState(0);
+  useEffect(() => {
+    console.log(window.innerWidth);
+    setWidth(window.innerWidth);
+  }, []);
   return (
     <>
       <div className={`${style.root} App ${dark && "dark"}`}>
         <div className={style.left}>
-          {emailVerified && !!photoUrl && !!userName && <LeftNavbar />}
+          {width > 500 && emailVerified && !!photoUrl && !!userName && (
+            <LeftNavbar />
+          )}
         </div>
         <div className={style.right}>
           <Navbar />
           <Section>
             {emailVerified && !!photoUrl && !!userName && (
-              <Expenses mode={mode} sort={sort} className={style.expenses}> 
+              <Expenses mode={mode} sort={sort} className={style.expenses}>
                 <div
                   className={style.controls}
                   style={{
@@ -134,10 +141,12 @@ const Transactions = (props) => {
                         Amount: high-low
                       </option>
                     </select>
-                    {/* <button className={style.filterButton}>Filter</button> */}
                   </div>
                 </div>
               </Expenses>
+            )}
+            {width < 500 && emailVerified && !!photoUrl && !!userName && (
+              <BottomNavbar></BottomNavbar>
             )}
           </Section>
         </div>

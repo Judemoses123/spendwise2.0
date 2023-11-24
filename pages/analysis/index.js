@@ -16,6 +16,8 @@ import getTransactionAsync from "../../Store/asyncThunk/getTransactionAsync";
 import LineChart from "@/components/graphComponents/LineChart";
 import { useRouter } from "next/router";
 import PieChart from "@/components/graphComponents/PieChart";
+import BottomNavbar from "@/components/navigationComponents/BottomNavbar";
+
 const Analysis = () => {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const router = useRouter();
@@ -46,11 +48,18 @@ const Analysis = () => {
     }
     dispatch(setIdTokenAsync());
   }, []);
+  const [width, setWidth] = useState(0);
+  useEffect(() => {
+    console.log(window.innerWidth);
+    setWidth(window.innerWidth);
+  }, []);
   return (
     <>
       <div className={`${style.root} App ${dark && "dark"}`}>
         <div className={style.left}>
-          {emailVerified && !!photoUrl && !!userName && <LeftNavbar />}
+          {width > 500 && emailVerified && !!photoUrl && !!userName && (
+            <LeftNavbar />
+          )}
         </div>
         <div className={style.right}>
           <Navbar />
@@ -104,6 +113,9 @@ const Analysis = () => {
                   </div>
                 </div>
               </div>
+            )}
+            {width < 500 && emailVerified && !!photoUrl && !!userName && (
+              <BottomNavbar></BottomNavbar>
             )}
           </Section>
         </div>

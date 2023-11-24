@@ -15,7 +15,7 @@ import ReportComponents from "@/components/reportComponents/reportControls";
 import JsPDF from "jspdf";
 import { useReactToPrint } from "react-to-print";
 import Papa from "papaparse";
-
+import BottomNavbar from "@/components/navigationComponents/BottomNavbar";
 const Reports = () => {
   const [mode, setMode] = useState("all");
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
@@ -95,12 +95,19 @@ const Reports = () => {
   const getData = (data) => {
     return data;
   };
+  const [width, setWidth] = useState(0);
 
+  useEffect(() => {
+    console.log(window.innerWidth);
+    setWidth(window.innerWidth);
+  }, []);
   return (
     <>
       <div className={`${style.root} App ${dark && "dark"}`}>
         <div className={style.left}>
-          {emailVerified && !!photoUrl && !!userName && <LeftNavbar />}
+          {width > 500 && emailVerified && !!photoUrl && !!userName && (
+            <LeftNavbar />
+          )}
         </div>
         <div className={style.right}>
           <Navbar />
@@ -190,6 +197,9 @@ const Reports = () => {
                 </div>
                 <ReportComponents clickHandler={clickHandler} />
               </div>
+            )}
+            {width < 500 && emailVerified && !!photoUrl && !!userName && (
+              <BottomNavbar />
             )}
           </Section>
         </div>

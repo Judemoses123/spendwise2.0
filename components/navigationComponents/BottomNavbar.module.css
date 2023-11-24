@@ -1,0 +1,44 @@
+.main {
+  background-color: white;
+  width: 100vw;
+  height: 4rem;
+  position: fixed;
+  bottom: 0px;
+  left: 0px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  align-items: center;
+  justify-content: center;
+  border-top: 1px solid lightgray;
+}
+.mainDark {
+  background-color: black;
+  width: 100vw;
+  height: 4rem;
+  position: fixed;
+  bottom: 0px;
+  left: 0px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  align-items: center;
+  justify-content: center;
+  border-top: 1px solid darkgray;
+
+}
+.icon {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  color: black;
+}
+.iconDark {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  color: white;
+}
+.active {
+  color: cornflowerblue;
+}
