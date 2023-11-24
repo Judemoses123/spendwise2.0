@@ -78,12 +78,16 @@ const Analysis = () => {
                   <div className={style.utilities}>
                     <Utilities showForm={false} />
                   </div>
-                  <div className={style.line}>
-                    {width > 500 && <LineChart />}
-                  </div>
-                  <div className={style.lineMobile}>
-                    {width <= 500 && <LineChart aspectRatio={1} />}
-                  </div>
+                  {width > 500 && (
+                    <div className={style.line}>
+                      <LineChart />
+                    </div>
+                  )}
+                  {width <= 500 && (
+                    <div className={style.lineMobile}>
+                      <LineChart aspectRatio={1} />
+                    </div>
+                  )}
                 </div>
                 <div className={style.rightGrid}>
                   <div className={style.pie}>
