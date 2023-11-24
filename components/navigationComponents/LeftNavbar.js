@@ -5,11 +5,16 @@ import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import AnalyticsIcon from "@mui/icons-material/Analytics";
 import ArticleIcon from "@mui/icons-material/Article";
 import CurrencyExchangeIcon from "@mui/icons-material/CurrencyExchange";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import Link from "next/link";
 import { useRouter } from "next/router";
 const LeftNavbar = () => {
+  const [width, setWidth] = useState();
+  useEffect(() => {
+    console.log(window.innerWidth);
+    setWidth(window.innerWidth);
+  }, [window.innerWidth]);
   const [showNavigation, setShowNavigation] = useState(false);
   const router = useRouter();
   const toggleShow = () => {
@@ -22,6 +27,7 @@ const LeftNavbar = () => {
     setShowNavigation(false);
   };
   const dark = useSelector((state) => state.theme.dark);
+
   return (
     <div
       onMouseOver={showNav}

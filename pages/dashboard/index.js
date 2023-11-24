@@ -44,7 +44,11 @@ const Home = () => {
     }
     dispatch(setIdTokenAsync());
   }, []);
-
+  const [width, setWidth] = useState();
+  useEffect(() => {
+    console.log(window.innerWidth);
+    setWidth(window.innerWidth);
+  }, []);
   return (
     <div className={`${style.root} App ${dark && "dark"}`}>
       <div className={style.left}>
@@ -60,14 +64,12 @@ const Home = () => {
               <Utilities showForm={true} />
             </div>
           )}
-          {emailVerified && !!photoUrl && !!userName && (
-            <div className={style.line}>
-              <LineChart />
-            </div>
+          {emailVerified && !!photoUrl && !!userName && width >= 500 && (
+            <div>{width > 500 && <LineChart />}</div>
           )}
           {emailVerified && !!photoUrl && !!userName && (
             <div className={style.lineMobile}>
-              <LineChart aspectRatio={1}/>
+              {width <= 500 && <LineChart aspectRatio={1} />}
             </div>
           )}
           {emailVerified && !!photoUrl && !!userName && (
@@ -79,7 +81,9 @@ const Home = () => {
             >
               <div className={style.expenseInfoBar}>
                 <b>Recent transactions</b>
-                <Link style={{color:'grey'}} href={"/transactions"}>See more</Link>
+                <Link style={{ color: "grey" }} href={"/transactions"}>
+                  See more
+                </Link>
               </div>
             </Expenses>
           )}
