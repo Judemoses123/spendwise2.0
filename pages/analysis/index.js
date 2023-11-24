@@ -75,10 +75,10 @@ const Analysis = () => {
                     <Utilities showForm={false} />
                   </div>
                   <div className={style.line}>
-                    <LineChart />
+                    {width > 500 && <LineChart />}
                   </div>
                   <div className={style.lineMobile}>
-                    <LineChart aspectRatio={1} />
+                    {width <= 500 && <LineChart aspectRatio={1} />}
                   </div>
                 </div>
                 <div className={style.rightGrid}>
