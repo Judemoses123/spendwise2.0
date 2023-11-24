@@ -28,9 +28,7 @@ const Navbar = () => {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const displayName = useSelector((state) => state.profile.displayName);
   const dark = useSelector((state) => state.theme.dark);
-  useEffect(() => {
-    dispatch(getDarkAsync());
-  }, [dark]);
+  
   return (
     <div className={dark ? style.navbarBodyDark : style.navbarBody}>
       <ul className={style.navbarList}>
