@@ -3,7 +3,7 @@
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
   gap: 1rem;
-  width: inherit;
+  width: 100%;
   height: inherit;
   @media (max-width: 500px) {
     grid-template-columns: 1fr 1fr;

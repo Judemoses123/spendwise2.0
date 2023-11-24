@@ -70,7 +70,11 @@ const Analysis = () => {
             )}
             {emailVerified && !!photoUrl && !!userName && (
               <div className={style.mainGrid}>
-                <div className={style.leftGrid}>
+                <div
+                  className={
+                    width > 500 ? style.leftGrid : style.leftGridMobile
+                  }
+                >
                   <div className={style.utilities}>
                     <Utilities showForm={false} />
                   </div>
