@@ -102,7 +102,7 @@
   display: grid;
   box-sizing: border-box;
 
-  grid-template-columns: 1fr;
+  /* grid-template-columns: 1fr; */
 }
 
 .rightGrid {
