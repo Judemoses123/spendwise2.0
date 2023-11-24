@@ -126,6 +126,17 @@
   width: 100%;
   height: calc(100% - 0.5rem);
   justify-content: center;
+  @media (max-width:500px) {
+    display: none;
+  }
+}
+.lineMobile {
+  width: 100%;
+  height: calc(100% - 0.5rem);
+  justify-content: center;
+  @media (min-width:500px) {
+    display: none;
+  }
 }
 .utilities{
   width: inherit !important;

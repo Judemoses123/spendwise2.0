@@ -66,6 +66,11 @@ const Home = () => {
             </div>
           )}
           {emailVerified && !!photoUrl && !!userName && (
+            <div className={style.lineMobile}>
+              <LineChart aspectRatio={1}/>
+            </div>
+          )}
+          {emailVerified && !!photoUrl && !!userName && (
             <Expenses
               mode="all"
               sort="date-recent"

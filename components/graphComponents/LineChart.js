@@ -237,7 +237,7 @@ const LineChart = (props) => {
       },
     },
     responsive: true,
-    aspectRatio: 4,
+    aspectRatio: props.aspectRatio ? props.aspectRatio : 4,
     maintainAspectRatio: true,
   };
 
@@ -252,7 +252,7 @@ const LineChart = (props) => {
       },
     },
     responsive: true,
-    aspectRatio: 4,
+    aspectRatio: props.aspectRatio ? props.aspectRatio : 4,
     maintainAspectRatio: true,
   };
   const getStats = () => {

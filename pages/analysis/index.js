@@ -68,6 +68,9 @@ const Analysis = () => {
                   <div className={style.line}>
                     <LineChart />
                   </div>
+                  <div className={style.lineMobile}>
+                    <LineChart aspectRatio={1} />
+                  </div>
                 </div>
                 <div className={style.rightGrid}>
                   <div className={style.pie}>
@@ -117,15 +120,6 @@ const calculateFinancialHealthScore = (transactions) => {
     investment: 0.2,
     debt: -0.3,
   };
-
-  // const weightedSums = Object.keys(weights).reduce((sums, factor) => {
-  //   sums +=
-  //     transactions
-  //       .filter((item) => item.type === factor)
-  //       .reduce((total, item) => total + Number(item.amount), 0) *
-  //     weights[factor];
-  //   return sums;
-  // }, 0);
   const income = transactions.reduce((prev, curr) => {
     if (curr.type === "income") return prev + Number(curr.amount);
     else return prev;

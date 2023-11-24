@@ -80,6 +80,17 @@
   width: 100%;
   height: min-content;
   justify-content: center;
+  @media (max-width:500px) {
+    display: none;
+  }
+}
+.lineMobile{
+  width: 100%;
+  height: min-content;
+  justify-content: center;
+  @media (min-width:500px) {
+    display: none;
+  }
 }
 .utilities {
   /* width: inherit !important; */
