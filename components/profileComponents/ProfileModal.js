@@ -80,7 +80,7 @@ const ProfileModal = (props) => {
       </div>
       <button className={style.options}>
         <EditIcon />
-        <Link style={{ color: "white" }} href="/updateprofile">
+        <Link style={{ color: "white" }} href="/update-profile">
           Edit Profile
         </Link>
       </button>

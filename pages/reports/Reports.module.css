@@ -137,4 +137,7 @@
 .expenses {
   height: calc(100vh - 11rem);
   overflow: auto;
+  @media (max-width:500px) {
+    height: calc(100vh - 19rem);
+  }
 }

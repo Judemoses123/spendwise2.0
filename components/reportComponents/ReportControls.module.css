@@ -9,6 +9,12 @@
     align-items: center;
     justify-content: space-between;
     height: 4rem;
+    @media (max-width: 500px) {
+        flex-direction: column;
+        width: 100%;
+        gap: 1rem;
+        height: calc(100% - 1rem);
+      }
 }
 .left{
     display: flex;

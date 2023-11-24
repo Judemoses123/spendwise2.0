@@ -11,7 +11,6 @@ const Account = () => {
       <Section>
         <div className={`${style.main} App`}>
           <div className={style.left}>
-            <img draggable={false} src="https://apemcl.ap.gov.in/asset/images/login_illustration.svg"></img>
           </div>
           <div className={style.right}>
             <div className={style.header}>Welcome to Spendwise</div>

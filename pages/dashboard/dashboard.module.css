@@ -82,7 +82,7 @@
   justify-content: center;
 }
 .utilities {
-  width: inherit !important;
+  /* width: inherit !important; */
   justify-content: center;
   display: flex;
 }

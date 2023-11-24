@@ -54,6 +54,7 @@
   overflow-y: hidden;
   @media (max-width: 500px) {
     flex-direction: column-reverse;
+    height: 100%;
   }
 }
 .left {
@@ -72,6 +73,10 @@
   height: 100vh;
   box-sizing: border-box;
   width: 100%;
+  @media (max-width:500px) {
+    overflow: auto;
+    height: 100%;
+  }
 }
 .mainGrid {
   width: 100%;
@@ -79,6 +84,11 @@
   gap: 1rem;
   height: calc(100vh - 6rem);
   overflow: hidden;
+  @media(max-width:500px){
+    flex-direction: column;
+    overflow: auto;
+    height: 100%;
+  }
 }
 
 .leftGrid {
@@ -87,6 +97,9 @@
   grid-template-rows: 1fr 2fr;
   box-sizing: border-box;
   /* overflow: hidden; */
+  @media (max-width:500px) {
+    grid-template-columns: 1fr;
+  }
 }
 
 .rightGrid {

@@ -188,7 +188,7 @@ const Form = (props) => {
         )}
         {loginMode && (
           <Link
-            href="/resetpassword"
+            href="/reset-password"
             style={{ fontSize: "small", padding: "1rem 0rem" }}
           >
             Forgot password?
