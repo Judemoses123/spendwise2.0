@@ -4,7 +4,6 @@
   height: 100vh;
   border-right: 1px solid lightgray;
   @media (max-width: 500px) {
-    background-color: rgb(255 255 255 / 100%);
     position: absolute;
     width: 100%;
     height: 4rem;
@@ -16,7 +15,6 @@
   backdrop-filter: blur(10px);
   height: 100vh;
   border-right: 1px solid rgb(77, 77, 77);
-
   @media (max-width: 500px) {
     position: absolute;
     width: 100%;
@@ -32,6 +30,11 @@
   align-items: center;
   justify-content: start;
   padding: 0rem 2rem;
+  @media (max-width: 500px) {
+    display: none;
+    position: fixed;
+    bottom: 0;
+  }
 }
 .hidehead {
   height: 4rem;

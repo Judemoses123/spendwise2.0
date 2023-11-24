@@ -71,7 +71,6 @@ const LeftNavbar = () => {
         >
           <div
             className={!showNavigation ? style.hidepageLink : style.pageLink}
-            // style={{ color: dark ? "#ececec" : "" }}
           >
             <CurrencyExchangeIcon className={style.icons} />
             <div className={!showNavigation ? style.hidetext : style.text}>
