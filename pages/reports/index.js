@@ -17,7 +17,6 @@ import { useReactToPrint } from "react-to-print";
 import Papa from "papaparse";
 import BottomNavbar from "@/components/navigationComponents/BottomNavbar";
 const Reports = () => {
-  const [mode, setMode] = useState("all");
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const router = useRouter();
   const dispatch = useDispatch();
@@ -29,40 +28,99 @@ const Reports = () => {
   const dark = useSelector((state) => state.theme.dark);
   const sortRef = useRef();
   const [ref, setRef] = useState();
-  const [sort, setSort] = useState(
-    !!sortRef.current ? sortRef.current.value : "date-recent"
-  );
   const [sortedData, setSortedData] = useState([]);
   const expensesRef = useRef();
-  useEffect(() => {
-    if (idToken) {
-      dispatch(getProfileDataAsync({ idToken: idToken }));
-    }
-    allHandler();
-  }, [isLoggedIn]);
-  const incomeHandler = () => {
-    setMode("income");
-  };
-  const expenseHandler = () => {
-    setMode("expense");
-  };
-  const allHandler = () => {
-    setMode("all");
-  };
-  useEffect(() => {
-    dispatch(getPremiumStateAsync());
-    dispatch(getTransactionAsync());
-  }, [userName]);
+  const [transactions, setTransactions] = useState([]);
 
   useEffect(() => {
-    if (!isLoggedIn) {
-      router.replace("/");
+    async function validity() {
+      const response = await dispatch(setIdTokenAsync());
+      if (!isLoggedIn) {
+        router.replace("/");
+      } else {
+        router.replace("/reports");
+        await allHandler();
+        const data = await dispatch(
+          getTransactionAsync({
+            type: mode,
+            sort: (sortRef.current.value ??= "recent"),
+            duration: "all",
+            page: '1',
+            fetchOnly: false,
+            pagination: false,
+          })
+        );
+        console.log(data);
+        setTransactions(data.payload.transactions);
+      }
     }
-    dispatch(setIdTokenAsync());
-  }, []);
+    validity();
+  }, [isLoggedIn]);
+
+  const [mode, setMode] = useState("all");
+  const [sort, setSort] = useState(
+    !!sortRef.current ? sortRef.current.value : "recent"
+  );
+
+  const incomeHandler = async () => {
+    setMode("income");
+    const data = await dispatch(
+      getTransactionAsync({
+        type: "income",
+        sort: sort,
+        duration: "all",
+        page: "1",
+        fetchOnly: true,
+        pagination: false,
+      })
+    );
+    setTransactions(data.payload.transactions);
+  };
+  const expenseHandler = async () => {
+    setMode("expense");
+    const data = await dispatch(
+      getTransactionAsync({
+        type: "expense",
+        sort: sort,
+        duration: "all",
+        page: "1",
+        fetchOnly: true,
+        pagination: false,
+      })
+    );
+    setTransactions(data.payload.transactions);
+  };
+  const allHandler = async () => {
+    setMode("all");
+    const data = await dispatch(
+      getTransactionAsync({
+        type: "all",
+        sort: sort,
+        duration: "all",
+        page: "1",
+        fetchOnly: true,
+        pagination: false,
+      })
+    );
+    setTransactions(data.payload.transactions);
+  };
+
+  const sortChangeHandler = async () => {
+    const data = await dispatch(
+      getTransactionAsync({
+        type: mode,
+        sort: sortRef.current.value,
+        duration: "all",
+        page: "1",
+        fetchOnly: true,
+        pagination: false,
+      })
+    );
+    setTransactions(data.payload.transactions);
+  };
 
   const printHandler = useReactToPrint({
-    content: () => expensesRef.current,
+    content: () => document.getElementById("transaction-list"),
   });
   const downloadHandler = (transactions) => {
     const csv = Papa.unparse(transactions);
@@ -77,10 +135,6 @@ const Reports = () => {
     document.body.appendChild(a);
     a.click();
     window.URL.revokeObjectURL(url);
-  };
-  const sortChangeHandler = () => {
-    setMode((prev) => prev);
-    setSort(sortRef.current.value);
   };
 
   const clickHandler = (data) => {
@@ -116,6 +170,7 @@ const Reports = () => {
               <div>
                 <div ref={expensesRef}>
                   <Expenses
+                    transactions={transactions}
                     mode={mode}
                     sort={sort}
                     className={style.expenses}

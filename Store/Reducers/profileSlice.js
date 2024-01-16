@@ -5,7 +5,7 @@ const initialProfileState = {
   displayName: "",
   photoUrl: "",
   emailVerified: false,
-  isPremium: true,
+  isPremium: false,
 };
 
 const profileSlice = createSlice({
@@ -17,6 +17,7 @@ const profileSlice = createSlice({
       state.displayName = action.payload.displayName;
       state.photoUrl = action.payload.photoUrl;
       state.emailVerified = action.payload.emailVerified;
+      state.isPremium = action.payload.isPremium;
     },
     update(state, action) {
       state.displayName = action.payload.displayName;
@@ -28,9 +29,7 @@ const profileSlice = createSlice({
       state.isPremium = true;
     },
     getPremiumState(state, action) {
-      state.isPremium = !!action.payload
-        ? action.payload.isPremium
-        : false;
+      state.isPremium = !!action.payload ? action.payload.isPremium : false;
     },
   },
 });

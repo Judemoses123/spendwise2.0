@@ -4,30 +4,32 @@ import { update } from "../Reducers/profileSlice";
 const updateAsync = createAsyncThunk(
   "auth/updateAsync",
   async (payload, { dispatch, getState }) => {
+    const token = localStorage.getItem("token");
+    console.log(token);
     try {
       const updateBody = {
-        idToken: payload.idToken,
         displayName: payload.displayName,
         photoUrl: payload.photoUrl,
-        returnSecureToken: true,
       };
-      const response = await fetch(
-        `https://identitytoolkit.googleapis.com/v1/accounts:update?key=AIzaSyBwDAFOT_zame9LlDjzKtYXl5OtCBMGBl0`,
-        {
-          method: "POST",
-          body: JSON.stringify(updateBody),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      console.log(updateBody);
+      const response = await fetch(`http://localhost:8080/updateUser`, {
+        method: "POST",
+        body: JSON.stringify(updateBody),
+        headers: {
+          "Content-Type": "application/json",
+          Authentication: token,
+        },
+      });
       if (!response.ok) {
         const error = await response.json();
         console.log("error", error);
         throw new Error("Oops! Something Went Wrong");
       }
       const data = await response.json();
-      dispatch(update(data));
+      console.log(data);
+      dispatch(
+        update({ displayName: data.displayName, photoUrl: data.photoUrl })
+      );
     } catch (error) {
       console.log(error);
     }

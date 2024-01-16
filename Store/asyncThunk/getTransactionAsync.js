@@ -5,31 +5,36 @@ const getTransactionAsync = createAsyncThunk(
   "transaction/getTransactionAsync",
   async (payload, { dispatch, getState }) => {
     const username = getState().profile.displayName;
-    const email= getState().auth.email;
+    const email = getState().auth.email;
+    const fetchOnly = payload.fetchOnly;
     if (!!username) {
       try {
-        const shortenedUsername = username.replace(" ", "");
-        const hashCode = createHash("sha1").update(email).digest("hex");
         const response = await fetch(
-          `https://spendwise-client-default-rtdb.firebaseio.com/users/${hashCode}/transactions.json`
+          `http://localhost:8080/getTransactions/${payload.type}/${payload.sort}/${payload.duration}/${payload.page}/${payload.pagination}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authentication: getState().auth.token,
+            },
+          }
         );
 
         if (!response.ok) {
-          const error = await response.json();
-          console.log(error);
           console.log("response failed");
           throw new Error("getting failed");
         }
 
         const data = await response.json();
-        const array = [];
-        for (let element in data) {
-          array.unshift({ ...data[element], id: element });
-        }
-        // console.log(array);
-        dispatch(getTransaction(array));
+        if (!fetchOnly) dispatch(getTransaction(data.transactions));
+        return {
+          transactions: data.transactions,
+          max: data.max,
+          stats: data.stats,
+          count: data.count,
+        };
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     }
   }

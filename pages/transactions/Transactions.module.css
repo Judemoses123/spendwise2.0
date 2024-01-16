@@ -129,6 +129,23 @@
   border-radius: 5px;
   letter-spacing: 1px;
 }
-.expenses{
+.expenses {
   height: auto;
+}
+.pagination {
+  /* background-color: orange; */
+  padding: 1rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  background-color: white;
+}
+.paginationButtons {
+  background-color: lavender;
+  padding: 5px;
+  border: 1px solid grey;
+}
+.paginationActive {
 }

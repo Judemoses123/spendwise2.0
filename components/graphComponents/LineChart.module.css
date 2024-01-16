@@ -35,3 +35,20 @@
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
 }
+.noTransactionsContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.noTransactionsText {
+  font-size: 1rem;
+  font-weight: bold;
+}
+.noTransactionsImage {
+  background-image: url("https://cdni.iconscout.com/illustration/premium/thumb/no-payment-method-8316265-6632285.png?f=webp");
+  width: 100%;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}

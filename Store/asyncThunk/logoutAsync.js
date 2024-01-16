@@ -4,7 +4,7 @@ import { logout } from "../Reducers/authSlice";
 const logoutAsync = createAsyncThunk(
   "auth/logoutAsyncThunk",
   async (payload, { dispatch }) => {
-    localStorage.setItem("idToken", "");
+    localStorage.removeItem("token");
     dispatch(logout());
   }
 );

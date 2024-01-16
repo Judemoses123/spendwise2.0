@@ -3,24 +3,24 @@
   backdrop-filter: blur(10px);
   height: 100vh;
   border-right: 1px solid lightgray;
-  /* @media (max-width: 500px) {
+  @media (max-width: 500px) {
     position: absolute;
     width: 100%;
     height: 4rem;
     display: flex;
-  } */
+  }
 }
 .maindark {
   background-color: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(10px);
   height: 100vh;
   border-right: 1px solid rgb(77, 77, 77);
-  /* @media (max-width: 500px) {
+  @media (max-width: 500px) {
     position: absolute;
     width: 100%;
     height: 4rem;
     display: flex;
-  } */
+  }
 }
 .head {
   height: 4rem;
@@ -30,11 +30,11 @@
   align-items: center;
   justify-content: start;
   padding: 0rem 2rem;
-  /* @media (max-width: 500px) {
+  @media (max-width: 500px) {
     display: none;
     position: fixed;
     bottom: 0;
-  } */
+  }
 }
 .hidehead {
   height: 4rem;
@@ -45,18 +45,18 @@
   justify-content: start;
   padding: 0rem 2rem;
   padding: 0rem 1rem 0rem 2rem;
-  /* @media (max-width: 500px) {
+  @media (max-width: 500px) {
     display: none;
     position: fixed;
     bottom: 0;
-  } */
+  }
 }
 .body {
   padding: 1rem 1rem;
   width: 100%;
   height: 100%;
   box-sizing: border-box;
-  /* @media (max-width: 500px) {
+  @media (max-width: 500px) {
     position: fixed;
     bottom: 0;
     display: flex;
@@ -64,7 +64,7 @@
     justify-content: space-evenly;
     z-index: 10000;
     border-top: 1px solid lightgrey;
-  } */
+  }
 }
 .logo {
   height: 100%;
@@ -72,9 +72,9 @@
   background-size: cover;
   background-image: url("../../images/spendwiseLogoLatest.png");
   aspect-ratio: 2.5;
-  /* @media (max-width: 500px) {
+  @media (max-width: 500px) {
     display: none;
-  } */
+  }
 }
 .logoSquare {
   height: 1.8rem;
@@ -82,9 +82,9 @@
   background-repeat: no-repeat;
   background-size: contain;
   background-image: url("../../images/spendwiseLogoSquare.png");
-  /* @media (max-width: 500px) {
+  @media (max-width: 500px) {
     display: none;
-  } */
+  }
 }
 .pageLink {
   display: grid;
@@ -119,24 +119,24 @@
 }
 .forward {
   font-size: 0.8rem !important;
-  /* @media (max-width: 500px) {
+  @media (max-width: 500px) {
     display: none;
-  } */
+  }
 }
 .hideforward {
   display: none !important;
-  /* @media (max-width: 500px) {
+  @media (max-width: 500px) {
     display: none;
-  } */
+  }
 }
 .text {
-  /* @media (max-width: 500px) {
+  @media (max-width: 500px) {
     display: none;
-  } */
+  }
 }
 .hidetext {
   display: none;
-  /* @media (max-width: 500px) {
+  @media (max-width: 500px) {
     display: none;
-  } */
+  }
 }

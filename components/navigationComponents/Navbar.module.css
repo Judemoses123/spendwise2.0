@@ -1,165 +1,187 @@
 .navbarBody {
-    width: -webkit-fill-available;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    height: 4rem;
-    position: fixed;
-    top: 0;
-    z-index: 5;
-    backdrop-filter: blur(10px);
-    /* border-bottom: 1px solid lightgray; */
-    background-color: rgba(255, 255, 255, 0.7);
-    border-bottom: 1px solid lightgray;
+  width: -webkit-fill-available;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  height: 4rem;
+  position: fixed;
+  top: 0;
+  z-index: 5;
+  backdrop-filter: blur(10px);
+  /* border-bottom: 1px solid lightgray; */
+  background-color: rgba(255, 255, 255, 0.7);
+  border-bottom: 1px solid lightgray;
+}
+.navbarBodyDark {
+  width: -webkit-fill-available;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  height: 4rem;
+  position: fixed;
+  top: 0;
+  z-index: 5;
+  backdrop-filter: blur(10px);
+  /* border-bottom: 1px solid lightgray; */
+  background-color: rgba(25, 25, 25, 0.7);
+  border-bottom: 1px solid rgb(77, 77, 77);
+}
+.navbarList {
+  display: flex;
+  align-items: center;
+  list-style: none;
+  flex-direction: row;
+  margin: 0;
+  height: 100%;
+  padding: 0 1rem;
+  justify-content: flex-end;
+  @media (max-width: 500px) {
+    flex-direction: row-reverse;
   }
-  .navbarBodyDark {
-    width: -webkit-fill-available;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    height: 4rem;
-    position: fixed;
-    top: 0;
-    z-index: 5;
-    backdrop-filter: blur(10px);
-    /* border-bottom: 1px solid lightgray; */
-    background-color: rgba(25, 25, 25, 0.7);
-    border-bottom: 1px solid rgb(77, 77, 77);
-
-
-  }
-  .navbarList {
-    display: flex;
-    align-items: center;
-    list-style: none;
-    flex-direction: row;
-    margin: 0;
-    height: 100%;
-    padding: 0 1rem;
-    justify-content: end;
-    @media (max-width: 500px) {
-      flex-direction: row-reverse;
-    }
-  }
-  .navbarList li {
-    margin: 0rem 1rem;
-    color: rgb(124, 124, 124);
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    @media (max-width: 500px) {
-      display: none;
-    }
-  }
-  .logo {
-    background-image: url("../../images//spendwiseLogoLatest.png");
-    /* background-image: url('../../Images/spendwiseLogoSquare.png'); */
-    height: 100%;
-    background-size: contain;
-    background-repeat: no-repeat;
-    margin: 0 !important;
-    background-position: center;
-    aspect-ratio: 2.5 !important;
-    /*---------------------*/
-    font-size: 1.3rem;
-    font-weight: bold;
-    color: dimgray;
-    display: flex;
-    align-items: center;
-    justify-content: start;
-    @media (max-width: 500px) {
-      
-    }
-  }
-  .logoLocation {
-    height: 100%;
-    background-size: contain;
-    background-repeat: no-repeat;
-    margin: 0 !important;
-    background-position: center;
-    aspect-ratio: 2.5 !important;
-    /*---------------------*/
-    font-size: 1.3rem;
-    font-weight: bold;
-    color: dimgray;
-    display: flex;
-    align-items: center;
-    justify-content: start;
-    text-transform: capitalize;
-    width: 30vw;
-    @media (max-width:500px) {
-      width: 50vw;
-    }
-  }
-  .profile {
-    display: flex;
-    height: calc(100% - 2rem - 2px);
-    align-items: center;
-    border-radius: 10rem;
-    background-position: center;
-    margin: 1rem;
-    background-size: cover;
-  }
-  .profilePicture {
-    aspect-ratio: 1;
-    height: 2rem;
-    border-radius: 10rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    /* background-image: url("../../Images/Portrait_Placeholder.png"); */
-    background-size: cover;
-    color: white;
-    text-shadow: 1px 1px black;
-    background-position: center;
-  }
-  .profileCompletionPrompt {
-    height: 100%;
-    border-top-right-radius: 10rem;
-    border-bottom-right-radius: 10rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 1rem;
-    box-sizing: border-box;
-    font-size: small;
-    @media (max-width: 750px) {
-      display: none;
-    }
-  }
-  .heading {
-    font-size: 1.2rem;
-    font-weight: 500;
-    padding: 2rem 1rem 1rem 1rem;
-  }
-  .hamburger {
-    height: calc(100% - 1rem);
-    aspect-ratio: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+}
+.navbarList li {
+  margin: 0rem 1rem;
+  color: rgb(124, 124, 124);
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  @media (max-width: 500px) {
     display: none;
-    @media (min-width: 500px) {
-      display: none;
-    }
   }
-  .container {
-    display: flex;
-    height: 2rem;
-    margin-right: 1rem;
-    justify-content: space-between;
-    align-items: stretch;
+}
+.logo {
+  background-image: url("../../images//spendwiseLogoLatest.png");
+  /* background-image: url('../../Images/spendwiseLogoSquare.png'); */
+  height: 100%;
+  background-size: contain;
+  background-repeat: no-repeat;
+  margin: 0 !important;
+  background-position: center;
+  aspect-ratio: 2.5 !important;
+  /*---------------------*/
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: dimgray;
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  @media (max-width: 500px) {
   }
-  .modeButton {
-    border-radius: 100%;
-    width: 2rem;
-    height: 2rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 0;
+}
+.logoLocation {
+  height: 100%;
+  background-size: contain;
+  background-repeat: no-repeat;
+  margin: 0 !important;
+  background-position: center;
+  aspect-ratio: 2.5 !important;
+  /*---------------------*/
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: dimgray;
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  text-transform: capitalize;
+  width: 30vw;
+  @media (max-width: 500px) {
+    width: 50vw;
   }
-  
+}
+.profile {
+  display: flex;
+  height: calc(100% - 2rem - 2px);
+  align-items: center;
+  border-radius: 10rem;
+  background-position: center;
+  margin: 1rem;
+  background-size: cover;
+}
+.profilePicture {
+  aspect-ratio: 1;
+  height: 2rem;
+  border-radius: 10rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* background-image: url("../../Images/Portrait_Placeholder.png"); */
+  background-size: cover;
+  color: white;
+  text-shadow: 1px 1px black;
+  background-position: center;
+}
+.profileCompletionPrompt {
+  height: 100%;
+  border-top-right-radius: 10rem;
+  border-bottom-right-radius: 10rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  box-sizing: border-box;
+  font-size: small;
+  @media (max-width: 750px) {
+    display: none;
+  }
+}
+.heading {
+  font-size: 1.2rem;
+  font-weight: 500;
+  padding: 2rem 1rem 1rem 1rem;
+}
+.hamburger {
+  height: calc(100% - 1rem);
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  display: none;
+  @media (min-width: 500px) {
+    display: none;
+  }
+}
+.container {
+  display: flex;
+  height: 2rem;
+  margin-right: 1rem;
+  justify-content: space-between;
+  align-items: stretch;
+}
+.modeButton {
+  border-radius: 100%;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+}
+
+.premiumButton {
+  padding: 5px;
+  margin-right: 1rem;
+  border-radius: 5px;
+  border: none;
+  background-color: orange;
+  color: white;
+  font-weight: bold;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 5px;
+  box-sizing: border-box;
+}
+
+.crown {
+  width: 1.5rem;
+  height: 1.5rem;
+  background-image: url("../../images/crownsvg.svg");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  color: white;
+}
+

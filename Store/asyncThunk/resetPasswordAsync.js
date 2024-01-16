@@ -2,21 +2,17 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { resetPassword } from "../Reducers/profileSlice";
 const resetPasswordAsync = createAsyncThunk(
   "auth/resetPasswordAsync",
-  async (payload, { dispatch }) => {
+  async (payload, { dispatch, getState }) => {
     try {
-      const response = await fetch(
-        `https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=AIzaSyBwDAFOT_zame9LlDjzKtYXl5OtCBMGBl0`,
-        {
-          method: "POST",
-          body: JSON.stringify({
-            email: payload,
-            requestType: "PASSWORD_RESET",
-          }),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await fetch(`http://localhost:8080/forgotPassword`, {
+        method: "POST",
+        body: JSON.stringify({
+          email: payload,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
       if (!response.ok) {
         const error = await response.json();
         console.log(error);
@@ -24,7 +20,7 @@ const resetPasswordAsync = createAsyncThunk(
       }
       const data = await response.json();
       console.log(data);
-      dispatch(resetPassword(payload));
+      // dispatch(resetPassword(payload));
     } catch (error) {
       console.log(error);
     }

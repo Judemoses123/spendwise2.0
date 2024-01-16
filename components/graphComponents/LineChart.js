@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { format } from "date-fns";
+import { useDispatch, useSelector } from "react-redux";
 import style from "./LineChart.module.css";
 import { Line } from "react-chartjs-2";
 import {
@@ -9,257 +8,229 @@ import {
   CategoryScale,
   LinearScale,
   PointElement,
+  Filler,
 } from "chart.js";
+import getTransactionAsync from "@/Store/asyncThunk/getTransactionAsync";
 
-ChartJS.register(LineElement, CategoryScale, LinearScale, PointElement);
+ChartJS.register(LineElement, CategoryScale, LinearScale, PointElement, Filler);
 
-function getMonthLength(monthNumber) {
-  if (monthNumber < 1 || monthNumber > 12) {
-    return "Invalid month number";
-  }
-  const daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-  return daysInMonth[monthNumber - 1];
-}
 const LineChart = (props) => {
-  const dark = useSelector((state) => state.theme.dark);
   const transactions = useSelector((state) => state.transaction.transactions);
-
-  const [mode, setMode] = useState("week");
-  const [expenseData, setExpenseData] = useState([0, 0, 0, 0, 0, 0, 0]);
-  const [incomeData, setIncomeData] = useState([0, 0, 0, 0, 0, 0, 0]);
-  const [maxValue, setMaxValue] = useState(0);
-  const [maxIncomeValue, setMaxIncomeValue] = useState(0);
-  const [monthlyIncomeData, setMonthlyIncomeData] = useState([]);
-  const [monthlyExpenseData, setMonthlyExpenseData] = useState([]);
-  const [montlyMaxExpenseValue, setMontlyMaxExpenseValue] = useState(0);
-  const [montlyMaxIncomeValue, setMontlyMaxIncomeValue] = useState(0);
+  const dispatch = useDispatch();
+  const dark = useSelector((state) => state.theme.dark);
+  const [duration, setDuration] = useState("week");
   const [stats, setStats] = useState(0);
-  const weekHandler = () => setMode("week");
-  const monthHandler = () => setMode("month");
-  const [totalWeeklyIncome, setTotalWeeklyIncome] = useState(0);
-  const [totalWeeklyExpense, setTotalWeeklyExpense] = useState(0);
-  const [totalMonthlyIncome, setTotalMonthlyIncome] = useState(0);
-  const [totalMonthlyExpense, setTotalMonthlyExpense] = useState(0);
-  const getWeeklyData = (type) => {
-    const today = new Date();
-    const mondayBefore = new Date(today);
-    mondayBefore.setDate(today.getDate() - ((today.getDay() + 6) % 7));
 
-    const weeklyData = Array(7).fill(0);
-    let maxValue = 0;
-    let expense = 0;
-    let income = 0;
-    for (let i = 0; i < 7; i++) {
-      const searchDate = new Date(mondayBefore);
-      searchDate.setDate(mondayBefore.getDate() + i);
-
-      const value = transactions.reduce((prev, curr) => {
-        const currDate = new Date(curr.date);
-        if (
-          searchDate.getDate() === currDate.getDate() &&
-          searchDate.getMonth() === currDate.getMonth() &&
-          searchDate.getFullYear() === currDate.getFullYear() &&
-          curr.type === type
-        ) {
-          return prev + Number(curr.amount);
+  //Beautify Data
+  const beautifyData = (data, type) => {
+    if (duration == "week") {
+      const transactions = new Array(7).fill(0);
+      for (let i = 0; i < data.length; i++) {
+        if (data[i].type == type) {
+          const day = (new Date(data[i].date).getDay() + 6) % 7;
+          transactions[day] = transactions[day] + Number(data[i].amount);
         }
-        return prev;
-      }, 0);
-      if (type == "expense") expense += Number(value);
-      if (type == "income") income += Number(value);
-
-      weeklyData[i] = value;
-      maxValue = Math.max(value, maxValue);
+      }
+      return transactions;
+    } else {
+      const transactions = new Array(31).fill(0);
+      for (let i = 0; i < data.length; i++) {
+        const date = new Date(data[i].date).getDate() - 1;
+        transactions[date] = transactions[date] + Number(data[i].amount);
+      }
+      return transactions;
     }
-    // setTotalWeeklyExpense(expense);
-    // console.log(expense);
-    // setTotalWeeklyIncome(income);
+  };
+
+  const weekArray = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+  const monthArray = [
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+    "10",
+    "11",
+    "12",
+    "13",
+    "14",
+    "15",
+    "16",
+    "17",
+    "18",
+    "19",
+    "20",
+    "21",
+    "22",
+    "23",
+    "24",
+    "25",
+    "26",
+    "27",
+    "28",
+    "29",
+    "30",
+    "31",
+  ];
+  //income states
+  const getChartData = async () => {
+    const expenseTransactions = await dispatch(
+      getTransactionAsync({
+        type: "expenses",
+        sort: "recent",
+        duration: duration,
+        page: "1",
+        fetchOnly: true,
+        pagination: false,
+      })
+    );
+
+    const incomeTransactions = await dispatch(
+      getTransactionAsync({
+        type: "income",
+        sort: "recent",
+        duration: duration,
+        page: "1",
+        fetchOnly: true,
+        pagination: false,
+      })
+    );
+
+    //Transaction Sum
+    const incomeStats = incomeTransactions.payload.stats;
+    const expenseStats = expenseTransactions.payload.stats;
+
+    setStats(incomeStats - expenseStats);
+
+    // const incomeMax = incomeTransactions.payload.max || 0;
+    // const expenseMax = expenseTransactions.payload.max || 0;
+
+    let income = incomeTransactions.payload?.transactions || [];
+    let expenses = expenseTransactions.payload?.transactions || [];
+
+    income = beautifyData(income, "income");
+    expenses = beautifyData(expenses, "expense");
+
     // console.log(income);
+    const incomeMax = income.reduce((prev, curr) => {
+      return curr > prev ? curr : prev;
+    });
+    // console.log(expenses);
+    const expenseMax = expenses.reduce((prev, curr) => {
+      return curr > prev ? curr : prev;
+    });
 
     return {
-      data: weeklyData,
-      max: maxValue,
-      expense: expense,
-      income: income,
+      data: {
+        labels: duration === "week" ? weekArray : monthArray,
+        datasets: [
+          {
+            label: "Income",
+            data: income,
+            tension: 0.4,
+            backgroundColor: dark ? "#ac1c8c" : "#53e373",
+            borderColor: dark ? "#ac1c8c" : "#53e373",
+            pointBorderColor: "#transparent",
+            // fill: true,
+            fill: {
+              target: "origin",
+              above: dark ? "#3e0a3387" : "#c1f5cc87", // Area will be red above the origin
+              below: "#000000", // And blue below the origin
+            },
+          },
+          {
+            label: "Expenses",
+            data: expenses,
+            tension: 0.4,
+            backgroundColor: dark ? "#059b98" : "#fa6467",
+            borderColor: dark ? "#059b98" : "#fa6467",
+            pointBorderColor: "#transparent",
+            fill: {
+              target: "origin",
+              above: dark ? "#02434294" : "#fdbcbd99", // Area will be red above the origin
+              below: "#000000", // And blue below the origin
+            },
+          },
+        ],
+      },
+      options: {
+        plugins: {
+          legend: true,
+        },
+        scales: {
+          y: {
+            min: 0,
+            max: Math.max(incomeMax, expenseMax),
+          },
+        },
+        responsive: true,
+        aspectRatio: props.aspectRatio ? props.aspectRatio : 4,
+        maintainAspectRatio: true,
+      },
     };
   };
 
-  const getMonthlyData = (type) => {
-    const today = new Date();
-    const firstOfMonth = new Date(today);
-    firstOfMonth.setDate(today.getDate() - today.getDate() + 1);
-
-    const monthlyData = [];
-    let maxValue = 0;
-    const searchDate = new Date(firstOfMonth);
-    let expense = 0;
-    let income = 0;
-    while (searchDate.getMonth() === today.getMonth()) {
-      const value = transactions.reduce((prev, curr) => {
-        const currDate = new Date(curr.date);
-        if (
-          searchDate.getDate() === currDate.getDate() &&
-          searchDate.getMonth() === currDate.getMonth() &&
-          searchDate.getFullYear() === currDate.getFullYear() &&
-          curr.type === type
-        ) {
-          return prev + Number(curr.amount);
-        }
-        return prev;
-      }, 0);
-
-      if (type == "expense") expense += Number(value);
-      if (type == "income") income += Number(value);
-      monthlyData.push(value);
-      maxValue = Math.max(value, maxValue);
-      searchDate.setDate(searchDate.getDate() + 1);
-    }
-    // setTotalMonthlyExpense(expense);
-    // console.log(totalMonthlyExpense);
-    // setTotalMonthlyIncome(income);
-    // console.log(totalMonthlyIncome);
-
-    return {
-      data: monthlyData,
-      max: maxValue,
-      expense: expense,
-      income: income,
-    };
+  const weekHandler = () => {
+    setDuration("week");
+  };
+  const monthHandler = () => {
+    setDuration("month");
   };
 
+  const labels = duration === "week" ? weekArray : monthArray;
+
+  //data state
+  const [data, setData] = useState({
+    labels: labels,
+    datasets: [
+      {
+        label: "weekly Transactions",
+        data: useSelector((state) => state.transaction.transactions).map(
+          (item) => item.amount
+        ),
+        tension: 0.4,
+        backgroundColor: dark ? "#059b98" : "#fa6467",
+        borderColor: dark ? "#059b98" : "#fa6467",
+        pointBorderColor: "#transparent",
+        fill: {
+          target: "origin",
+          above: dark ? "" : "#fdbcbd99",
+          below: "#000000",
+        },
+      },
+    ],
+  });
+
+  //options state
+  const [options, setOptions] = useState({
+    plugins: {
+      legend: true,
+    },
+    scales: {
+      y: {
+        min: 0,
+        max: Math.max(0, 0),
+      },
+    },
+    responsive: true,
+    aspectRatio: props.aspectRatio ? props.aspectRatio : 4,
+    maintainAspectRatio: true,
+  });
+
+  //useEffect
   useEffect(() => {
-    if (!transactions) return;
-
-    const {
-      data: weeklyExpenseData,
-      max: maxExpenseValue,
-      expense: totalWeeklyExpense,
-      income: dummyWeeklyIncome,
-    } = getWeeklyData("expense");
-    const {
-      data: weeklyIncomeData,
-      max: maxIncomeValue,
-      expense: dummyWeeklyExpense,
-      income: totalWeeklyIncome,
-    } = getWeeklyData("income");
-
-    setExpenseData(weeklyExpenseData);
-    setIncomeData(weeklyIncomeData);
-    setMaxValue(maxExpenseValue);
-    setMaxIncomeValue(maxIncomeValue);
-    setTotalWeeklyExpense(totalWeeklyExpense);
-    setTotalWeeklyIncome(totalWeeklyIncome);
-
-    const {
-      data: monthlyExpenseData,
-      max: montlyMaxExpenseValue,
-      expense: totalMonthlyExpense,
-      income: dummyMonthlyIncome,
-    } = getMonthlyData("expense");
-    const {
-      data: monthlyIncomeData,
-      max: montlyMaxIncomeValue,
-      expense: dummyMonthlyExpense,
-      income: totalMonthlyIncome,
-    } = getMonthlyData("income");
-
-    setMonthlyExpenseData(monthlyExpenseData);
-    setMonthlyIncomeData(monthlyIncomeData);
-    setMontlyMaxExpenseValue(montlyMaxExpenseValue);
-    setMontlyMaxIncomeValue(montlyMaxIncomeValue);
-    setTotalMonthlyExpense(totalMonthlyExpense);
-    setTotalMonthlyIncome(totalMonthlyIncome);
-    setStats(getStats());
-  }, [transactions]);
-
-  const data = {
-    labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-    datasets: [
-      {
-        label: "Income",
-        data: incomeData,
-        backgroundColor: dark ? "#ac1c8c" : "#53e373",
-        borderColor: dark ? "#ac1c8c" : "#53e373",
-        pointBorderColor: "#transparent",
-        fill: true,
-        tension: 0.4,
-      },
-      {
-        label: "Expenses",
-        data: expenseData,
-        backgroundColor: dark ? "#059b98" : "#fa6467",
-        borderColor: dark ? "#059b98" : "#fa6467",
-        pointBorderColor: "#transparent",
-        fill: true,
-        tension: 0.4,
-      },
-    ],
-  };
-
-  const today = new Date();
-  const monthArray = Array.from(
-    { length: getMonthLength(today.getMonth()) },
-    (_, i) => (i + 1).toString()
-  );
-
-  const monthlyData = {
-    labels: monthArray,
-    datasets: [
-      {
-        label: "Income",
-        data: monthlyIncomeData,
-        backgroundColor: dark ? "#ac1c8c" : "#53e373",
-        borderColor: dark ? "#ac1c8c" : "#53e373",
-        pointBorderColor: "#transparent",
-        fill: true,
-        tension: 0.4,
-      },
-      {
-        label: "Expenses",
-        data: monthlyExpenseData,
-        backgroundColor: dark ? "#059b98" : "#fa6467",
-        borderColor: dark ? "#059b98" : "#fa6467",
-        pointBorderColor: "#transparent",
-        fill: true,
-        tension: 0.4,
-      },
-    ],
-  };
-
-  const options = {
-    plugins: {
-      legend: true,
-    },
-    scales: {
-      y: {
-        min: 0,
-        max: Math.max(maxValue, maxIncomeValue),
-      },
-    },
-    responsive: true,
-    aspectRatio: props.aspectRatio ? props.aspectRatio : 4,
-    maintainAspectRatio: true,
-  };
-
-  const monthlyOptions = {
-    plugins: {
-      legend: true,
-    },
-    scales: {
-      y: {
-        min: 0,
-        max: Math.max(montlyMaxExpenseValue, montlyMaxIncomeValue),
-      },
-    },
-    responsive: true,
-    aspectRatio: props.aspectRatio ? props.aspectRatio : 4,
-    maintainAspectRatio: true,
-  };
-  const getStats = () => {
-    const income = mode === "week" ? totalWeeklyIncome : totalMonthlyIncome;
-    const expense = mode === "week" ? totalWeeklyExpense : totalMonthlyExpense;
-    return income - expense;
-  };
+    async function anonymous() {
+      const response = await getChartData();
+      // console.log(response);
+      setData(response.data);
+      setOptions(response.options);
+    }
+    anonymous();
+  }, [duration, transactions, data.datasets.data, dark]);
 
   return (
     <div
@@ -272,33 +243,54 @@ const LineChart = (props) => {
       <div className={style.header}>
         <span>
           <b>Total Stats</b> &nbsp;
-          <b style={{ color: getStats() >= 0 ? "green" : "salmon" }}>
-            {getStats() >= 0 ? "+" : "-"}
-            {Math.abs(getStats())}&#8377;
-          </b>{" "}
+          <b style={{ color: stats >= 0 ? "green" : "salmon" }}>
+            {stats >= 0 ? "+" : "-"}
+            {Math.abs(stats)}&#8377;
+          </b>
         </span>
         <div className={style.options}>
           <button
             onClick={weekHandler}
-            className={`${style.button} ${mode === "week" && style.active}`}
+            className={`${style.button} ${duration === "week" && style.active}`}
           >
             Weekly
           </button>
           <button
             onClick={monthHandler}
-            className={`${style.button} ${mode === "month" && style.active}`}
+            className={`${style.button} ${
+              duration === "month" && style.active
+            }`}
           >
             Monthly
           </button>
         </div>
       </div>
-      <Line
-        className={`${dark && style.invert} ${
-          props.className && props.className
-        }`}
-        data={mode === "week" ? data : monthlyData}
-        options={mode === "week" ? options : monthlyOptions}
-      ></Line>
+      {
+        <>
+          {options.scales.y.max == 0 && (
+            <div className={style.noTransactionsContainer}>
+              <span className={style.noTransactionsText}>
+                No Transactions Found
+              </span>
+              <div
+                style={{
+                  aspectRatio: props.aspectRatio ? props.aspectRatio : 4,
+                }}
+                className={style.noTransactionsImage}
+              ></div>
+            </div>
+          )}
+          {options.scales.y.max != 0 && (
+            <Line
+              className={`${dark && style.invert} ${
+                props.className && props.className
+              }`}
+              data={data}
+              options={options}
+            ></Line>
+          )}
+        </>
+      }
     </div>
   );
 };

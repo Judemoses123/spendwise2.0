@@ -66,9 +66,13 @@ const ExpenseItem = (props) => {
           <>
             <div
               className={style.date}
-              style={{ fontSize: "0.9rem", color: dark ? " white" : "dimgrey" }}
+              style={{
+                fontSize: "0.8rem",
+                letterSpacing: "1px",
+                color: dark ? " white" : "dimgrey",
+              }}
             >
-              <b>{props.date}</b>
+              <b>{new Date(props.date).toLocaleDateString().replace(" ", ", ")}</b>
             </div>
             <div className={style.category}>
               {props.type == "expense" ? props.category : props.source}
@@ -80,7 +84,7 @@ const ExpenseItem = (props) => {
                 color: props.type === "income" ? "#53e373" : "#fa6467",
               }}
             >
-              <b>{props.amount} &#8377;</b>
+              <b>&#8377; {props.amount} </b>
             </div>
           </>
         )}
@@ -151,14 +155,12 @@ const ExpenseItem = (props) => {
             <div
               className={style.overlay}
               style={{
-                backgroundColor: dark
-                  ? "black"
-                  : "white",
+                backgroundColor: dark ? "black" : "white",
                 color: dark ? "white" : "black",
               }}
             >
               <span>Options</span>
-              <button onClick={editHandler} className={style.edit}>
+              <button name="menu" onClick={editHandler} className={style.edit}>
                 {showEditor ? (
                   "Submit"
                 ) : (

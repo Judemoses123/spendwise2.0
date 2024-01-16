@@ -33,6 +33,7 @@ const ExpenseForm = () => {
     dispatch(addTransactionAsync(expenseObject));
     toggleShow();
   };
+
   const submitIncomeHandler = (event) => {
     event.preventDefault();
     const enteredAmount = amountInputRef.current.value;
@@ -50,16 +51,19 @@ const ExpenseForm = () => {
     console.log(incomeObject);
     toggleShow();
   };
+
   const premiumHandler = () => {
     console.log("premium");
     dispatch(activatePremiumAsync());
   };
+
   const dark = useSelector((state) => state.theme.dark);
   const [showForm, setShowForm] = useState(false);
   const [expenseMode, setExpenseMode] = useState(true);
   const toggleShow = () => {
     setShowForm((prev) => !prev);
   };
+
   const curr = new Date();
   const date = curr.toISOString().substring(0, 10);
 
@@ -80,7 +84,11 @@ const ExpenseForm = () => {
     >
       {showForm && (
         <>
-          <CloseIcon onClick={toggleShow} className={style.CloseIcon} style={{color:dark && 'white'}}/>
+          <CloseIcon
+            onClick={toggleShow}
+            className={style.CloseIcon}
+            style={{ color: dark && "white" }}
+          />
           <input
             type="date"
             className={dark ? style.dateInputDark : style.dateInput}
@@ -141,23 +149,14 @@ const ExpenseForm = () => {
               </select>
             )}
           </div>
-          {(isPremium || totalExpense < expenseLimit) && (
+          {
             <button
               onClick={expenseMode ? sumbitExpenseHandler : submitIncomeHandler}
               className={expenseMode ? style.expense : style.income}
             >
               {expenseMode ? "ADD EXPENSE" : " ADD INCOME"}
             </button>
-          )}
-          {!isPremium && totalExpense >= expenseLimit && (
-            <button
-              onClick={premiumHandler}
-              style={{ backgroundColor: "salmon" }}
-              className={style.button}
-            >
-              // GET PREMIUM
-            </button>
-          )}
+          }
         </>
       )}
       {!showForm && (

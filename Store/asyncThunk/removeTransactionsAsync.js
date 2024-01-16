@@ -5,24 +5,14 @@ const removeTransactionsAsync = createAsyncThunk(
   "transactions/removeTransactionsAsync",
   async (payload, { dispatch, getState }) => {
     try {
-      const username = getState().profile.displayName;
-      const email= getState().auth.email;
-      console.log(username);
-      const shortenedUsername = username.replace(" ", "");
-      console.log(shortenedUsername);
-      console.log(payload);
-      const hashCode = createHash("sha1").update(email).digest("hex");
-        console.log(hashCode);
-      const response = await fetch(
-        `https://spendwise-client-default-rtdb.firebaseio.com/users/${hashCode}/transactions/${payload.id}.json`,
-        {
-          method: "DELETE",
-          // body: JSON.stringify(payload),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await fetch(`http://localhost:8080/deleteTransaction`, {
+        method: "DELETE",
+        body: JSON.stringify(payload),
+        headers: {
+          "Content-Type": "application/json",
+          Authentication: getState().auth.token,
+        },
+      });
       if (!response.ok) {
         const error = await response.json();
         console.log(error);

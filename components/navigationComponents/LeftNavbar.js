@@ -6,25 +6,25 @@ import AnalyticsIcon from "@mui/icons-material/Analytics";
 import ArticleIcon from "@mui/icons-material/Article";
 import CurrencyExchangeIcon from "@mui/icons-material/CurrencyExchange";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { toggleOverlay } from "@/Store/Reducers/themeSlice";
 const LeftNavbar = () => {
+  const isPremium = useSelector((state) => state.profile.isPremium);
+  const dispatch = useDispatch();
   const [width, setWidth] = useState(window.innerWidth);
   useEffect(() => {
     console.log(window.innerWidth);
     setWidth(window.innerWidth);
   }, [window.innerWidth]);
-  const [showNavigation, setShowNavigation] = useState(false);
+  const showNavigation = useSelector((state) => state.theme.overlay);
   const router = useRouter();
-  const toggleShow = () => {
-    setShowNavigation((prev) => !prev);
-  };
   const showNav = () => {
-    setShowNavigation(true);
+    dispatch(toggleOverlay(true));
   };
   const hideNav = () => {
-    setShowNavigation(false);
+    dispatch(toggleOverlay(false));
   };
   const dark = useSelector((state) => state.theme.dark);
 
@@ -35,10 +35,7 @@ const LeftNavbar = () => {
       className={dark ? style.maindark : style.main}
     >
       <div className={!showNavigation ? style.hidehead : style.head}>
-        <div
-          className={showNavigation ? style.logo : style.logoSquare}
-          onClick={toggleShow}
-        ></div>
+        <div className={showNavigation ? style.logo : style.logoSquare}></div>
       </div>
       <div className={style.body}>
         <Link
@@ -112,30 +109,32 @@ const LeftNavbar = () => {
           </div>
         </Link>
 
-        <Link
-          style={{
-            color:
-              router.asPath == "/reports"
-                ? "cornflowerblue"
-                : !dark
-                ? "dimgrey"
-                : "white",
-          }}
-          href={"/reports"}
-        >
-          <div
-            className={!showNavigation ? style.hidepageLink : style.pageLink}
-            // style={{ color: dark ? "#ececec" : "" }}
+        {isPremium && (
+          <Link
+            style={{
+              color:
+                router.asPath == "/reports"
+                  ? "cornflowerblue"
+                  : !dark
+                  ? "dimgrey"
+                  : "white",
+            }}
+            href={"/reports"}
           >
-            <ArticleIcon className={style.icons} />
-            <div className={!showNavigation ? style.hidetext : style.text}>
-              Reports
+            <div
+              className={!showNavigation ? style.hidepageLink : style.pageLink}
+              // style={{ color: dark ? "#ececec" : "" }}
+            >
+              <ArticleIcon className={style.icons} />
+              <div className={!showNavigation ? style.hidetext : style.text}>
+                Reports
+              </div>
+              <ArrowForwardIosIcon
+                className={!showNavigation ? style.hideforward : style.forward}
+              />
             </div>
-            <ArrowForwardIosIcon
-              className={!showNavigation ? style.hideforward : style.forward}
-            />
-          </div>
-        </Link>
+          </Link>
+        )}
       </div>
     </div>
   );

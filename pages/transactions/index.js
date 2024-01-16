@@ -13,57 +13,147 @@ import getTransactionAsync from "../../Store/asyncThunk/getTransactionAsync";
 import { useRouter } from "next/router";
 import BottomNavbar from "@/components/navigationComponents/BottomNavbar";
 const Transactions = (props) => {
-  const [mode, setMode] = useState("all");
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const router = useRouter();
   const dispatch = useDispatch();
   const [message, setMessage] = useState("");
-  const idToken = useSelector((state) => state.auth.idToken);
   const emailVerified = useSelector((state) => state.profile.emailVerified);
   const photoUrl = useSelector((state) => state.profile.photoUrl);
   const userName = useSelector((state) => state.profile.displayName);
   const dark = useSelector((state) => state.theme.dark);
   const sortRef = useRef();
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [mode, setMode] = useState("all");
   const [sort, setSort] = useState(
-    !!sortRef.current ? sortRef.current.value : "date-recent"
+    !!sortRef.current ? sortRef.current.value : "recent"
   );
+  const [transactions, setTransactions] = useState([]);
 
   useEffect(() => {
-    if (idToken) {
-      dispatch(getProfileDataAsync({ idToken: idToken }));
+    async function validity() {
+      const response = await dispatch(setIdTokenAsync());
+      if (!isLoggedIn) {
+        router.replace("/");
+      } else {
+        router.replace("/transactions");
+        await allHandler();
+        const data = await dispatch(
+          getTransactionAsync({
+            type: mode,
+            sort: (sortRef.current.value ??= "recent"),
+            duration: "all",
+            page: page,
+            fetchOnly: false,
+            pagination: true,
+          })
+        );
+        console.log(data);
+        setTransactions(data.payload.transactions);
+        setTotalPages(Math.ceil(data.payload.count / 10));
+      }
     }
-    allHandler();
+    validity();
   }, [isLoggedIn]);
-  const incomeHandler = () => {
+
+  const incomeHandler = async () => {
     setMode("income");
+    const data = await dispatch(
+      getTransactionAsync({
+        type: "income",
+        sort: sort,
+        duration: "all",
+        page: page,
+        fetchOnly: false,
+        pagination: true,
+      })
+    );
+    console.log(data);
+    setPage(1);
+    setTransactions(data.payload.transactions);
+    setTotalPages(Math.ceil(data.payload.count / 10));
   };
-  const expenseHandler = () => {
+  const expenseHandler = async () => {
     setMode("expense");
+    const data = await dispatch(
+      getTransactionAsync({
+        type: "expense",
+        sort: sort,
+        duration: "all",
+        page: page,
+        fetchOnly: false,
+        pagination: true,
+      })
+    );
+    console.log(data);
+    setPage(1);
+    setTransactions(data.payload.transactions);
+    setTotalPages(Math.ceil(data.payload.count / 10));
   };
-  const allHandler = () => {
+  const allHandler = async () => {
     setMode("all");
+    const data = await dispatch(
+      getTransactionAsync({
+        type: "all",
+        sort: sort,
+        duration: "all",
+        page: page,
+        fetchOnly: false,
+        pagination: true,
+      })
+    );
+    setPage(1);
+    setTransactions(data.payload.transactions);
+    setTotalPages(Math.ceil(data.payload.count / 10));
   };
-  useEffect(() => {
-    dispatch(getPremiumStateAsync());
-    dispatch(getTransactionAsync());
-  }, [userName]);
 
-  useEffect(() => {
-    if (!isLoggedIn) {
-      router.replace("/");
-    }
-    dispatch(setIdTokenAsync());
-  }, []);
-
-  const sortChangeHandler = () => {
-    setMode((prev) => prev);
-    setSort(sortRef.current.value);
+  const sortChangeHandler = async () => {
+    const data = await dispatch(
+      getTransactionAsync({
+        type: mode,
+        sort: (sortRef.current.value ??= "recent"),
+        duration: "all",
+        page: page,
+        fetchOnly: false,
+        pagination: true,
+      })
+    );
+    console.log(data);
+    setPage(1);
+    setTransactions(data.payload);
+    setTotalPages(Math.ceil(data.payload.count / 10));
   };
+
+  const incrementPage = () => {
+    setPage(page + 1);
+  };
+  const decrementPage = () => {
+    setPage(page - 1);
+  };
+
   const [width, setWidth] = useState(0);
+
   useEffect(() => {
-    console.log(window.innerWidth);
-    setWidth(window.innerWidth);
-  }, []);
+    const pageChange = async () => {
+      console.log(window.innerWidth);
+      setWidth(window.innerWidth);
+      const data = await dispatch(
+        getTransactionAsync({
+          type: mode,
+          sort: "recent",
+          duration: "all",
+          page: page,
+          fetchOnly: false,
+          pagination: true,
+        })
+      );
+      console.log(data);
+      setTransactions(data.payload.transactions);
+      setTotalPages(Math.ceil(data.payload.count / 10));
+    };
+    pageChange();
+  }, [page]);
+
   return (
     <>
       <div className={`${style.root} App ${dark && "dark"}`}>
@@ -76,74 +166,111 @@ const Transactions = (props) => {
           <Navbar />
           <Section>
             {emailVerified && !!photoUrl && !!userName && (
-              <Expenses mode={mode} sort={sort} className={style.expenses}>
-                <div
-                  className={style.controls}
-                  style={{
-                    backgroundColor: dark && "black",
-                    color: dark && "white",
-                  }}
+              <>
+                <Expenses
+                  className={style.expenses}
+                  transactions={transactions}
                 >
-                  <div className={style.type}>
-                    <button
-                      onClick={allHandler}
-                      className={`${style.typeButtons} ${
-                        mode == "all" && style.active
-                      }`}
-                    >
-                      All
-                    </button>
-                    <button
-                      onClick={incomeHandler}
-                      className={`${style.typeButtons} ${
-                        mode == "income" && style.activeIncome
-                      }`}
-                    >
-                      Income
-                    </button>
-                    <button
-                      onClick={expenseHandler}
-                      className={`${style.typeButtons} ${
-                        mode == "expense" && style.activeExpenses
-                      }`}
-                    >
-                      Expenses
-                    </button>
+                  <div
+                    className={style.controls}
+                    style={{
+                      backgroundColor: dark && "black",
+                      color: dark && "white",
+                    }}
+                  >
+                    <div className={style.type}>
+                      <button
+                        onClick={allHandler}
+                        className={`${style.typeButtons} ${
+                          mode == "all" && style.active
+                        }`}
+                      >
+                        All
+                      </button>
+                      <button
+                        onClick={incomeHandler}
+                        className={`${style.typeButtons} ${
+                          mode == "income" && style.activeIncome
+                        }`}
+                      >
+                        Income
+                      </button>
+                      <button
+                        onClick={expenseHandler}
+                        className={`${style.typeButtons} ${
+                          mode == "expense" && style.activeExpenses
+                        }`}
+                      >
+                        Expenses
+                      </button>
+                    </div>
+                    <div className={style.controlsRight}>
+                      <select
+                        className={style.sort}
+                        ref={sortRef}
+                        onChange={sortChangeHandler}
+                      >
+                        <option className={style.sortOptions} value={"recent"}>
+                          Sort
+                        </option>
+                        <option className={style.sortOptions} value={"recent"}>
+                          Date: most recent
+                        </option>
+                        <option
+                          className={style.sortOptions}
+                          value={"earliest"}
+                        >
+                          Date: most earliest
+                        </option>
+                        <option
+                          className={style.sortOptions}
+                          value={"low-high"}
+                        >
+                          Amount: low-high
+                        </option>
+                        <option
+                          className={style.sortOptions}
+                          value={"high-low"}
+                        >
+                          Amount: high-low
+                        </option>
+                      </select>
+                    </div>
                   </div>
-                  <div className={style.controlsRight}>
-                    <select
-                      className={style.sort}
-                      ref={sortRef}
-                      onChange={sortChangeHandler}
+                </Expenses>
+                {
+                  <div
+                    style={{ backgroundColor: dark ? "black" : "white" }}
+                    className={style.pagination}
+                  >
+                    {page > 1 && (
+                      <button
+                        onClick={decrementPage}
+                        className={style.paginationButtons}
+                      >
+                        {page - 1}
+                      </button>
+                    )}
+                    <button
+                      style={{
+                        backgroundColor: "cornflowerblue",
+                        color: "white",
+                      }}
+                      className={style.paginationButtons}
                     >
-                      <option
-                        className={style.sortOptions}
-                        value={"date-recent"}
+                      {page}
+                    </button>
+                    {page < totalPages && (
+                      <button
+                        onClick={incrementPage}
+                        className={style.paginationButtons}
                       >
-                        Sort
-                      </option>
-                      <option
-                        className={style.sortOptions}
-                        value={"date-recent"}
-                      >
-                        Date: most recent
-                      </option>
-                      <option
-                        className={style.sortOptions}
-                        value={"date-earliest"}
-                      >
-                        Date: most earliest
-                      </option>
-                      <option className={style.sortOptions} value={"low-high"}>
-                        Amount: low-high
-                      </option>
-                      <option className={style.sortOptions} value={"high-low"}>
-                        Amount: high-low
-                      </option>
-                    </select>
+                        {page + 1}
+                      </button>
+                    )}
                   </div>
-                </div>
-              </Expenses>
+                }
+              </>
             )}
             {width < 500 && emailVerified && !!photoUrl && !!userName && (
               <BottomNavbar></BottomNavbar>

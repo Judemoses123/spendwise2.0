@@ -1,6 +1,6 @@
-import { useRef, useState, useEffect} from "react";
-import { useDispatch , useSelector } from "react-redux";
-import style from './UpdateProfile.module.css';
+import { useRef, useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import style from "./UpdateProfile.module.css";
 import updateAsync from "../../Store/asyncThunk/updateAsync";
 import PersonIcon from "@mui/icons-material/Person";
 import ImageIcon from "@mui/icons-material/Image";
@@ -10,9 +10,9 @@ const UpdateForm = () => {
   const nameInputRef = useRef();
   const photoUrlInputRef = useRef();
   const [error, setError] = useState("");
-const router= useRouter();
+  const router = useRouter();
   const dispatch = useDispatch();
-  const idToken = useSelector((state) => state.auth.idToken);
+  const token = useSelector((state) => state.auth.token);
   const userName = useSelector((state) => state.profile.displayName);
   const photoUrl = useSelector((state) => state.profile.photoUrl);
   const email = useSelector((state) => state.profile.email);
@@ -23,7 +23,7 @@ const router= useRouter();
     const enteredPhotoUrl = photoUrlInputRef.current.value;
 
     const updateData = {
-      idToken: idToken,
+      token: token,
       displayName: enteredName,
       photoUrl: enteredPhotoUrl,
     };
@@ -35,7 +35,7 @@ const router= useRouter();
       return;
     }
     dispatch(updateAsync(updateData));
-    router.push('/dashboard');
+    router.push("/dashboard");
   };
 
   useEffect(() => {

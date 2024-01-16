@@ -7,19 +7,14 @@ const getProfileDataAsync = createAsyncThunk(
   "profile/getProfileDataAsync",
   async (payload, { dispatch, getState }) => {
     try {
-      const idToken = getState().auth.idToken;
-      const response = await fetch(
-        `https://identitytoolkit.googleapis.com/v1/accounts:update?key=AIzaSyBwDAFOT_zame9LlDjzKtYXl5OtCBMGBl0`,
-        {
-          method: "POST",
-          body: JSON.stringify({
-            idToken: idToken,
-          }),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const token = getState().auth.token;
+      const response = await fetch(`http://localhost:8080/getUser`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authentication: token,
+        },
+      });
       if (!response.ok) {
         const error = await response.json();
         console.log(error);
@@ -31,6 +26,7 @@ const getProfileDataAsync = createAsyncThunk(
       return data;
     } catch (error) {
       console.log(error);
+      return null;
     }
   }
 );

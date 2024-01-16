@@ -3,9 +3,7 @@ import Navbar from "@/components/navigationComponents/Navbar";
 import Section from "@/components/uiComponents/Section";
 import style from "./dashboard.module.css";
 import { useDispatch, useSelector } from "react-redux";
-import getProfileDataAsync from "../../Store/asyncThunk/getProfileDataAsync";
 import setIdTokenAsync from "../../Store/asyncThunk/setIdTokenAsync";
-import getPremiumStateAsync from "../../Store/asyncThunk/getPremiumStateAsync";
 import "../../app/globals.css";
 import ProfileCompletion from "../../components/profileComponents/ProfileCompletion";
 import EmailVerification from "@/components/profileComponents/EmailVerification";
@@ -23,31 +21,38 @@ const Home = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const [message, setMessage] = useState("");
-  const idToken = useSelector((state) => state.auth.idToken);
   const emailVerified = useSelector((state) => state.profile.emailVerified);
   const photoUrl = useSelector((state) => state.profile.photoUrl);
   const userName = useSelector((state) => state.profile.displayName);
   const dark = useSelector((state) => state.theme.dark);
+  // const transactions = useSelector((state) => state.transaction.transactions);
+  const [transactions, setTransactions] = useState([]);
   useEffect(() => {
-    if (idToken) {
-      dispatch(getProfileDataAsync({ idToken: idToken }));
+    async function validity() {
+      const response = await dispatch(setIdTokenAsync());
+      if (!isLoggedIn) {
+        router.replace("/");
+      } else {
+        router.replace("/dashboard");
+        const data = await dispatch(
+          getTransactionAsync({
+            type: "all",
+            sort: "recent",
+            duration: "all",
+            page: "1",
+            fetchOnly: true,
+            pagination: true,
+          })
+        );
+        setTransactions(data.payload.transactions);
+      }
     }
+    validity();
   }, [isLoggedIn]);
 
-  useEffect(() => {
-    dispatch(getPremiumStateAsync());
-    dispatch(getTransactionAsync());
-  }, [userName]);
+  const [width, setWidth] = useState(0);
 
   useEffect(() => {
-    if (!isLoggedIn) {
-      router.replace("/");
-    }
-    dispatch(setIdTokenAsync());
-  }, []);
-  const [width, setWidth] = useState(0);
-  useEffect(() => {
-    console.log(window.innerWidth);
     setWidth(window.innerWidth);
   }, []);
   return (
@@ -68,7 +73,7 @@ const Home = () => {
             </div>
           )}
           {emailVerified && !!photoUrl && !!userName && width >= 500 && (
-            <div>{width > 500 && <LineChart />}</div>
+            <div>{width > 500 && <LineChart aspectRatio={4} />}</div>
           )}
           {emailVerified && !!photoUrl && !!userName && (
             <div className={style.lineMobile}>
@@ -81,6 +86,7 @@ const Home = () => {
               sort="date-recent"
               className={style.expenses}
               length={5}
+              transactions={transactions}
             >
               <div className={style.expenseInfoBar}>
                 <b>Recent transactions</b>

@@ -15,7 +15,6 @@ const Donut = (props) => {
         <Doughnut
           data={props.data}
           options={props.options}
-          // style={{ height: "6rem", width:'6rem' }}
           className={style.donut}
         ></Doughnut>
       </div>

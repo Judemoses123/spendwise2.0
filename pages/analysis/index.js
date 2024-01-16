@@ -17,29 +17,60 @@ import LineChart from "@/components/graphComponents/LineChart";
 import { useRouter } from "next/router";
 import PieChart from "@/components/graphComponents/PieChart";
 import BottomNavbar from "@/components/navigationComponents/BottomNavbar";
+import getFinancialHealthScore from "@/Store/asyncThunk/getFinancialHealthScore";
 
 const Analysis = () => {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const router = useRouter();
   const dispatch = useDispatch();
   const [message, setMessage] = useState("");
-  const idToken = useSelector((state) => state.auth.idToken);
+  const token = useSelector((state) => state.auth.token);
   const emailVerified = useSelector((state) => state.profile.emailVerified);
   const photoUrl = useSelector((state) => state.profile.photoUrl);
   const userName = useSelector((state) => state.profile.displayName);
   const dark = useSelector((state) => state.theme.dark);
-  const transactions = useSelector((state) => state.transaction.transactions);
+  const [transactions, setTransactions] = useState([]);
   const [score, setScore] = useState(0);
+
   useEffect(() => {
-    if (idToken) {
-      dispatch(getProfileDataAsync({ idToken: idToken }));
+    async function validity() {
+      const response = await dispatch(setIdTokenAsync());
+      if (!isLoggedIn) {
+        router.replace("/");
+      } else {
+        router.replace("/analysis");
+        const data = await dispatch(
+          getTransactionAsync({
+            type: "all",
+            sort: "recent",
+            duration: "all",
+            page: "1",
+            fetchOnly: false,
+            pagination: true,
+          })
+        );
+        console.log(data);
+        setTransactions(data.payload.transactions);
+        const response = await dispatch(getFinancialHealthScore());
+        console.log(response);
+        setScore(response.payload.score);
+      }
     }
+    validity();
   }, [isLoggedIn]);
 
   useEffect(() => {
     dispatch(getPremiumStateAsync());
-    dispatch(getTransactionAsync());
-    setScore(calculateFinancialHealthScore(transactions));
+    dispatch(
+      getTransactionAsync({
+        type: "all",
+        sort: "recent",
+        duration: "all",
+        page: "1",
+        fetchOnly: false,
+        pagination: true,
+      })
+    );
   }, [userName]);
 
   useEffect(() => {
@@ -80,7 +111,7 @@ const Analysis = () => {
                   </div>
                   {width > 500 && (
                     <div className={style.line}>
-                      <LineChart />
+                      <LineChart aspectRatio={3} />
                     </div>
                   )}
                   {width <= 500 && (
@@ -132,48 +163,3 @@ const Analysis = () => {
   );
 };
 export default Analysis;
-const calculateFinancialHealthScore = (transactions) => {
-  const weights = {
-    income: 0.25,
-    expenses: -0.25,
-    savings: 0.2,
-    investment: 0.2,
-    debt: -0.3,
-  };
-  const income = transactions.reduce((prev, curr) => {
-    if (curr.type === "income") return prev + Number(curr.amount);
-    else return prev;
-  }, 0);
-  const expense = transactions.reduce((prev, curr) => {
-    if (curr.type === "expense") return prev + Number(curr.amount);
-    else return prev;
-  }, 0);
-  const savings = income - expense;
-
-  const expenses = transactions.filter(
-    (transaction) => transaction.type === "expense"
-  );
-  const investment = expenses.reduce((prev, curr) => {
-    if (curr.category == "Savings and Investments") {
-      return prev + Number(curr.amount);
-    }
-    return prev;
-  }, 0);
-  const debt = expenses.reduce((prev, curr) => {
-    if (curr.category == "Debt Payments") {
-      return prev + Number(curr.amount);
-    }
-    return prev;
-  }, 0);
-
-  // console.log(weightedSums);
-  const score =
-    ((0.25 * income -
-      0.25 * expense +
-      0.2 * savings +
-      0.2 * investment -
-      0.3 * debt) /
-      (0.25 * income + 0.2 * savings + 0.2 * investment)) *
-    100;
-  return score.toFixed(2);
-};

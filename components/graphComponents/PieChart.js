@@ -1,8 +1,9 @@
 import { Chart as ChartJs, ArcElement, Tooltip, Legend } from "chart.js";
 import { Pie } from "react-chartjs-2";
 import style from "./PieChart.module.css";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
+import getExpenseCategories from "@/Store/asyncThunk/getExpenseCategories";
 
 ChartJs.register(ArcElement, Tooltip, Legend);
 const PieChart = (props) => {
@@ -12,29 +13,18 @@ const PieChart = (props) => {
   const [sortedCategoryExpenses, setSortedCategoryExpenses] = useState({});
   const [labels, setLabel] = useState([]);
   const [amount, setAmount] = useState([]);
+  const [expenses, setExpenses] = useState([]);
+  const dispatch = useDispatch();
   const dark = useSelector((state) => state.theme.dark);
   useState(categoryExpenses);
-  const getCategoryExpenses = () => {
-    const map = {};
-    const expenses = transactions.filter((item) => item.type === "expense");
-
-    expenses.forEach((element) => {
-      const { category, amount } = element;
-      map[category] = (map[category] ?? 0) + Number(amount);
-    });
-    const arr = Object.keys(map).map((category) => ({
-      category,
-      totalAmount: map[category],
-    }));
-    return arr;
-  };
-
   useEffect(() => {
-    const arr = getCategoryExpenses();
-    const labels = arr.map((item) => item.category);
-    const amount = arr.map((item) => item.totalAmount);
-    setLabel(labels);
-    setAmount(amount);
+    async function func() {
+      const data = await dispatch(getExpenseCategories());
+      console.log(data);
+      setLabel(data.payload.arr.map((item) => item.category));
+      setAmount(data.payload.arr.map((item) => item.totalAmount));
+    }
+    func();
   }, []);
 
   const data = {

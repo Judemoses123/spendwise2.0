@@ -11,7 +11,7 @@ import signupAsync from "@/Store/asyncThunk/signupAsync";
 const Form = (props) => {
   const dispatch = useDispatch();
   // const navigate = useNavigate();
-  const router= useRouter();
+  const router = useRouter();
   const [loginMode, setLoginMode] = useState(true);
   const [dataInvalid, setDataInvalid] = useState(false);
   const [matchFailed, setMatchFailed] = useState(false);
@@ -56,23 +56,21 @@ const Form = (props) => {
       confirmPassword: enteredConfirmPassword,
       mode: "signup",
     };
-    // const message = await AuthCTX.login(loginData);
-    // if (!!message ? setErrorMessage(message) : setErrorMessage(null));
+    
     const resp = await dispatch(signupAsync(loginData));
     setDataInvalid(false);
     setMatchFailed(false);
-    console.log(resp);
     await setResponse({ message: response.message, status: "failed" });
     if (resp.payload.status === "failed") {
       setResponse(resp.payload);
       return;
     } else if (resp.payload.status === "success") {
       setResponse(resp.payload);
-      // navigate("/dashboard");
-      router.push('/dashboard')
+      router.push("/dashboard");
       return;
     }
   };
+
   const formLoginHandler = async (event) => {
     event.preventDefault();
     const enteredEmail = emailInputRef.current.value;
@@ -90,15 +88,14 @@ const Form = (props) => {
       mode: "login",
     };
     const resp = await dispatch(loginAsync(loginData));
-    // console.log(resp);
+    console.log(resp);
     await setResponse({ message: response.message, status: "failed" });
     if (resp.payload.status === "failed") {
       setResponse(resp.payload);
       return;
     } else if (resp.payload.status === "success") {
       setResponse(resp.payload);
-      // navigate("/dashboard");
-      router.push('/dashboard')
+      router.push("/dashboard");
       return;
     }
   };
