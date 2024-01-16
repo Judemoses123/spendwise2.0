@@ -6,6 +6,7 @@ const initialProfileState = {
   photoUrl: "",
   emailVerified: false,
   isPremium: false,
+  dark: false,
 };
 
 const profileSlice = createSlice({
@@ -31,6 +32,9 @@ const profileSlice = createSlice({
     getPremiumState(state, action) {
       state.isPremium = !!action.payload ? action.payload.isPremium : false;
     },
+    toggleDark() {
+      state.dark = !state.dark;
+    },
   },
 });
 export const {
@@ -40,5 +44,6 @@ export const {
   resetPassword,
   activatePremium,
   getPremiumState,
+  toggleDark,
 } = profileSlice.actions;
 export default profileSlice.reducer;

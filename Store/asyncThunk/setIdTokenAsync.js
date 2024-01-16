@@ -24,7 +24,7 @@ const setIdTokenAsync = createAsyncThunk(
       }
       const data = await response.json();
       if (data.valid) {
-        dispatch(setToken({token}));
+        dispatch(setToken({ token }));
         const data = await dispatch(getProfileDataAsync());
         dispatch(setEmail(data.payload.email));
         return true;

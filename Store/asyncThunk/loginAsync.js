@@ -20,7 +20,7 @@ const loginAsync = createAsyncThunk(
       }
       const data = await response.json();
       console.log(data);
-      if (response.status < 300) {
+      if (data.status == "success") {
         dispatch(login(data));
         localStorage.setItem("token", data.token);
         return { message: "Login successful", status: "success" };

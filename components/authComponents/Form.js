@@ -58,6 +58,7 @@ const Form = (props) => {
     };
     
     const resp = await dispatch(signupAsync(loginData));
+    console.log(resp);
     setDataInvalid(false);
     setMatchFailed(false);
     await setResponse({ message: response.message, status: "failed" });
@@ -89,7 +90,7 @@ const Form = (props) => {
     };
     const resp = await dispatch(loginAsync(loginData));
     console.log(resp);
-    await setResponse({ message: response.message, status: "failed" });
+    // await setResponse({ message: response.message, status: "failed" });
     if (resp.payload.status === "failed") {
       setResponse(resp.payload);
       return;

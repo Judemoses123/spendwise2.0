@@ -26,6 +26,7 @@ const getTransactionAsync = createAsyncThunk(
         }
 
         const data = await response.json();
+        console.log(data);
         if (!fetchOnly) dispatch(getTransaction(data.transactions));
         return {
           transactions: data.transactions,

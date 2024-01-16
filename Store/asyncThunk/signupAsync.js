@@ -21,14 +21,14 @@ const signupAsync = createAsyncThunk(
       }
       const data = await response.json();
       console.log(data);
-      // if (response.status < 300) {
+      if (data.status == "success") {
         dispatch(login(data));
         localStorage.setItem("token", data.token);
         console.log("User has successfully signed up.");
         return { message: "Signup successful", status: "success" };
-      // } else {
+        // } else {
         // return { message: data.error.errors[0].message, status: "failed" };
-      // }
+      }
     } catch (error) {
       return { message: "Something went wrong", status: "failed" };
     }

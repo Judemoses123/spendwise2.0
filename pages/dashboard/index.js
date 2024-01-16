@@ -44,6 +44,7 @@ const Home = () => {
             pagination: true,
           })
         );
+        console.log(data);
         setTransactions(data.payload.transactions);
       }
     }
