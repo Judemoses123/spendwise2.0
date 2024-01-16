@@ -28,8 +28,10 @@ const Transactions = (props) => {
   const [sort, setSort] = useState(
     !!sortRef.current ? sortRef.current.value : "recent"
   );
-  const [transactions, setTransactions] = useState([]);
 
+  const [rpp, setRpp] = useState(10);
+  const [transactions, setTransactions] = useState([]);
+  const rppRef = useRef();
   useEffect(() => {
     async function validity() {
       const response = await dispatch(setIdTokenAsync());
@@ -50,7 +52,12 @@ const Transactions = (props) => {
         );
         console.log(data);
         setTransactions(data.payload.transactions);
-        setTotalPages(Math.ceil(data.payload.count / 10));
+        setRpp(() => {
+          const rpp = localStorage.getItem("rpp");
+          if (!!rpp) return rpp;
+          return 10;
+        });
+        setTotalPages(Math.ceil(data.payload.count / rpp));
       }
     }
     validity();
@@ -66,12 +73,13 @@ const Transactions = (props) => {
         page: page,
         fetchOnly: false,
         pagination: true,
+        rpp,
       })
     );
     console.log(data);
     setPage(1);
     setTransactions(data.payload.transactions);
-    setTotalPages(Math.ceil(data.payload.count / 10));
+    setTotalPages(Math.ceil(data.payload.count / rpp));
   };
   const expenseHandler = async () => {
     setMode("expense");
@@ -83,12 +91,13 @@ const Transactions = (props) => {
         page: page,
         fetchOnly: false,
         pagination: true,
+        rpp,
       })
     );
     console.log(data);
     setPage(1);
     setTransactions(data.payload.transactions);
-    setTotalPages(Math.ceil(data.payload.count / 10));
+    setTotalPages(Math.ceil(data.payload.count / rpp));
   };
   const allHandler = async () => {
     setMode("all");
@@ -100,11 +109,12 @@ const Transactions = (props) => {
         page: page,
         fetchOnly: false,
         pagination: true,
+        rpp,
       })
     );
     setPage(1);
     setTransactions(data.payload.transactions);
-    setTotalPages(Math.ceil(data.payload.count / 10));
+    setTotalPages(Math.ceil(data.payload.count / rpp));
   };
 
   const sortChangeHandler = async () => {
@@ -116,12 +126,13 @@ const Transactions = (props) => {
         page: page,
         fetchOnly: false,
         pagination: true,
+        rpp,
       })
     );
     console.log(data);
     setPage(1);
     setTransactions(data.payload);
-    setTotalPages(Math.ceil(data.payload.count / 10));
+    setTotalPages(Math.ceil(data.payload.count / rpp));
   };
 
   const incrementPage = () => {
@@ -145,15 +156,23 @@ const Transactions = (props) => {
           page: page,
           fetchOnly: false,
           pagination: true,
+          rpp,
         })
       );
       console.log(data);
-      setTransactions(data.payload.transactions);
-      setTotalPages(Math.ceil(data.payload.count / 10));
+      if (!!data.payload) {
+        setTransactions(data.payload.transactions);
+        setTotalPages(Math.ceil(data.payload.count / rpp));
+      }
     };
     pageChange();
-  }, [page]);
+  }, [page, rpp]);
 
+  const rppChangeHandler = () => {
+    setPage(1);
+    setRpp(rppRef.current.value);
+    localStorage.setItem("rpp", rppRef.current.value);
+  };
   return (
     <>
       <div className={`${style.root} App ${dark && "dark"}`}>
@@ -243,6 +262,22 @@ const Transactions = (props) => {
                     style={{ backgroundColor: dark ? "black" : "white" }}
                     className={style.pagination}
                   >
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        gap: "1rem",
+                      }}
+                    >
+                      Rows per Page:
+                      <select ref={rppRef} onChange={rppChangeHandler}>
+                        <option value={rpp}>{rpp}</option>
+                        <option value={"5"}>5</option>
+                        <option value={"10"}>10</option>
+                        <option value={"20"}>20</option>
+                        <option value={"50"}>50</option>
+                      </select>
+                    </div>
                     {page > 1 && (
                       <button
                         onClick={decrementPage}

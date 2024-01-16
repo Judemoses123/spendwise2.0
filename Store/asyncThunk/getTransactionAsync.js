@@ -7,10 +7,11 @@ const getTransactionAsync = createAsyncThunk(
     const username = getState().profile.displayName;
     const email = getState().auth.email;
     const fetchOnly = payload.fetchOnly;
+    const rpp = payload.rpp ? payload.rpp : 10;
     if (!!username) {
       try {
         const response = await fetch(
-          `http://localhost:8080/getTransactions/${payload.type}/${payload.sort}/${payload.duration}/${payload.page}/${payload.pagination}`,
+          `http://localhost:8080/getTransactions/${payload.type}/${payload.sort}/${payload.duration}/${payload.page}/${payload.pagination}/${rpp}`,
           {
             method: "GET",
             headers: {

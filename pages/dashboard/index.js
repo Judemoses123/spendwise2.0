@@ -25,7 +25,9 @@ const Home = () => {
   const photoUrl = useSelector((state) => state.profile.photoUrl);
   const userName = useSelector((state) => state.profile.displayName);
   const dark = useSelector((state) => state.theme.dark);
-  // const transactions = useSelector((state) => state.transaction.transactions);
+  const alltransactions = useSelector(
+    (state) => state.transaction.transactions
+  );
   const [transactions, setTransactions] = useState([]);
   useEffect(() => {
     async function validity() {
@@ -49,7 +51,7 @@ const Home = () => {
       }
     }
     validity();
-  }, [isLoggedIn]);
+  }, [isLoggedIn, alltransactions]);
 
   const [width, setWidth] = useState(0);
 
