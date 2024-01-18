@@ -1,7 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { useEffect } from "react";
-import { useSelector } from "react-redux";
 import { getProfileData } from "../Reducers/profileSlice";
+import { setDark } from "../Reducers/themeSlice";
 
 const getProfileDataAsync = createAsyncThunk(
   "profile/getProfileDataAsync",
@@ -20,9 +19,9 @@ const getProfileDataAsync = createAsyncThunk(
         console.log(error);
         throw new Error("something went wrong");
       }
-
       const data = await response.json();
       dispatch(getProfileData(data));
+      dispatch(setDark(Boolean(data.dark)));
       return data;
     } catch (error) {
       console.log(error);

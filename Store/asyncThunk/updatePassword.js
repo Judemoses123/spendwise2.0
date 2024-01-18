@@ -1,14 +1,12 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { resetPassword } from "../Reducers/profileSlice";
-const resetPasswordAsync = createAsyncThunk(
-  "auth/resetPasswordAsync",
+const updatePassword = createAsyncThunk(
+  "auth/updatePassword",
   async (payload, { dispatch, getState }) => {
     try {
-      const response = await fetch(`http://localhost:8080/forgotPassword`, {
+      const response = await fetch(`http://localhost:8080/updatePassword`, {
         method: "POST",
-        body: JSON.stringify({
-          email: payload,
-        }),
+        body: JSON.stringify(payload),
         headers: {
           "Content-Type": "application/json",
         },
@@ -20,9 +18,10 @@ const resetPasswordAsync = createAsyncThunk(
       }
       const data = await response.json();
       console.log(data);
+      return data;
     } catch (error) {
       console.log(error);
     }
   }
 );
-export default resetPasswordAsync;
+export default updatePassword;

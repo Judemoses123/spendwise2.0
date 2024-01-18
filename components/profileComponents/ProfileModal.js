@@ -1,6 +1,4 @@
-import ReactDOM from "react-dom";
 import React, { useContext, useState } from "react";
-import { Style } from "@mui/icons-material";
 import style from "./ProfileModal.module.css";
 import CloseIcon from "@mui/icons-material/Close";
 import Link from "next/link";

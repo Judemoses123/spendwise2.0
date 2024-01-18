@@ -1,5 +1,4 @@
 import style from "./ReportControls.module.css";
-import DownloadIcon from "@mui/icons-material/Download";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import { useRef } from "react";
 import { useSelector } from "react-redux";
@@ -15,7 +14,11 @@ const ReportComponents = (props) => {
   return (
     <div
       className={style.container}
-      style={{ backgroundColor: dark && "black", color: dark && "white" }}
+      style={{
+        backgroundColor: dark && "black",
+        color: dark && "white",
+        border: dark ? "1px solid #535353" : "1px solid lightgrey",
+      }}
     >
       <div className={style.left}>
         <div>Download As</div>

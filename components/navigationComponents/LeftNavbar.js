@@ -1,11 +1,9 @@
 import style from "./LeftNavbar.module.css";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import DashboardIcon from "@mui/icons-material/Dashboard";
-import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
-import AnalyticsIcon from "@mui/icons-material/Analytics";
+import SpaceDashboardIcon from "@mui/icons-material/SpaceDashboard";
+import PieChartIcon from "@mui/icons-material/PieChart";
 import ArticleIcon from "@mui/icons-material/Article";
-import CurrencyExchangeIcon from "@mui/icons-material/CurrencyExchange";
-import { useEffect, useState } from "react";
+import PaidIcon from "@mui/icons-material/Paid";
 import { useDispatch, useSelector } from "react-redux";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -13,11 +11,6 @@ import { toggleOverlay } from "@/Store/Reducers/themeSlice";
 const LeftNavbar = () => {
   const isPremium = useSelector((state) => state.profile.isPremium);
   const dispatch = useDispatch();
-  const [width, setWidth] = useState(window.innerWidth);
-  useEffect(() => {
-    console.log(window.innerWidth);
-    setWidth(window.innerWidth);
-  }, [window.innerWidth]);
   const showNavigation = useSelector((state) => state.theme.overlay);
   const router = useRouter();
   const showNav = () => {
@@ -52,7 +45,7 @@ const LeftNavbar = () => {
           <div
             className={!showNavigation ? style.hidepageLink : style.pageLink}
           >
-            <DashboardIcon className={style.icons} />
+            <SpaceDashboardIcon className={style.icons} />
             <div className={!showNavigation ? style.hidetext : style.text}>
               Dashboard
             </div>
@@ -75,7 +68,7 @@ const LeftNavbar = () => {
           <div
             className={!showNavigation ? style.hidepageLink : style.pageLink}
           >
-            <CurrencyExchangeIcon className={style.icons} />
+            <PaidIcon className={style.icons} />
             <div className={!showNavigation ? style.hidetext : style.text}>
               Transaction
             </div>
@@ -99,7 +92,7 @@ const LeftNavbar = () => {
             className={!showNavigation ? style.hidepageLink : style.pageLink}
             // style={{ color: dark ? "#ececec" : "" }}
           >
-            <AnalyticsIcon className={style.icons} />
+            <PieChartIcon className={style.icons} />
             <div className={!showNavigation ? style.hidetext : style.text}>
               Analysis
             </div>
@@ -109,6 +102,7 @@ const LeftNavbar = () => {
           </div>
         </Link>
 
+        {/* <PremiumBanner /> */}
         {isPremium && (
           <Link
             style={{

@@ -1,16 +1,14 @@
 import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/router";
 import Navbar from "@/components/navigationComponents/Navbar";
 import Section from "@/components/uiComponents/Section";
 import style from "./Transactions.module.css";
 import { useDispatch, useSelector } from "react-redux";
-import getProfileDataAsync from "../../Store/asyncThunk/getProfileDataAsync";
 import setIdTokenAsync from "../../Store/asyncThunk/setIdTokenAsync";
-import getPremiumStateAsync from "../../Store/asyncThunk/getPremiumStateAsync";
 import "../../app/globals.css";
 import LeftNavbar from "@/components/navigationComponents/LeftNavbar";
 import Expenses from "@/components/expenseComponents/Expenses";
 import getTransactionAsync from "../../Store/asyncThunk/getTransactionAsync";
-import { useRouter } from "next/router";
 import BottomNavbar from "@/components/navigationComponents/BottomNavbar";
 const Transactions = (props) => {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
@@ -33,106 +31,136 @@ const Transactions = (props) => {
   const [transactions, setTransactions] = useState([]);
   const rppRef = useRef();
   useEffect(() => {
-    async function validity() {
-      const response = await dispatch(setIdTokenAsync());
-      if (!isLoggedIn) {
-        router.replace("/");
-      } else {
-        router.replace("/transactions");
-        await allHandler();
-        const data = await dispatch(
-          getTransactionAsync({
-            type: mode,
-            sort: (sortRef.current.value ??= "recent"),
-            duration: "all",
-            page: page,
-            fetchOnly: false,
-            pagination: true,
-          })
-        );
-        console.log(data);
-        setTransactions(data.payload.transactions);
-        setRpp(() => {
-          const rpp = localStorage.getItem("rpp");
-          if (!!rpp) return rpp;
-          return 10;
-        });
-        setTotalPages(Math.ceil(data.payload.count / rpp));
+    try {
+      async function validity() {
+        const response = await dispatch(setIdTokenAsync());
+        if (!isLoggedIn) {
+          router.replace("/");
+        } else {
+          router.replace("/transactions");
+          await allHandler();
+          const data = await dispatch(
+            getTransactionAsync({
+              type: mode,
+              sort: sortRef.current ? sortRef.current.value : "recent",
+              duration: "all",
+              page: 1,
+              fetchOnly: false,
+              pagination: true,
+            })
+          );
+          setRpp(() => {
+            const rpp = localStorage.getItem("rpp");
+            if (!!rpp) return rpp;
+            return 10;
+          });
+          // console.log(data);
+          if (data.payload) {
+            setTransactions(data.payload.transactions);
+            setTotalPages(Math.ceil(data.payload.count / rpp));
+          }
+        }
       }
+      validity();
+    } catch (error) {
+      console.log(error);
     }
-    validity();
   }, [isLoggedIn]);
 
   const incomeHandler = async () => {
-    setMode("income");
-    const data = await dispatch(
-      getTransactionAsync({
-        type: "income",
-        sort: sort,
-        duration: "all",
-        page: page,
-        fetchOnly: false,
-        pagination: true,
-        rpp,
-      })
-    );
-    console.log(data);
-    setPage(1);
-    setTransactions(data.payload.transactions);
-    setTotalPages(Math.ceil(data.payload.count / rpp));
+    try {
+      setMode("income");
+      const data = await dispatch(
+        getTransactionAsync({
+          type: "income",
+          sort: sort,
+          duration: "all",
+          page: page,
+          fetchOnly: false,
+          pagination: true,
+          rpp,
+        })
+      );
+      // console.log(data);
+      setPage(1);
+      if (!!data.payload) {
+        setTransactions(data.payload.transactions);
+        setTotalPages(Math.ceil(data.payload.count / rpp));
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
   const expenseHandler = async () => {
-    setMode("expense");
-    const data = await dispatch(
-      getTransactionAsync({
-        type: "expense",
-        sort: sort,
-        duration: "all",
-        page: page,
-        fetchOnly: false,
-        pagination: true,
-        rpp,
-      })
-    );
-    console.log(data);
-    setPage(1);
-    setTransactions(data.payload.transactions);
-    setTotalPages(Math.ceil(data.payload.count / rpp));
+    try {
+      setMode("expense");
+      const data = await dispatch(
+        getTransactionAsync({
+          type: "expense",
+          sort: sort,
+          duration: "all",
+          page: page,
+          fetchOnly: false,
+          pagination: true,
+          rpp,
+        })
+      );
+      // console.log(data);
+      setPage(1);
+      if (!!data.payload) {
+        setTransactions(data.payload.transactions);
+        setTotalPages(Math.ceil(data.payload.count / rpp));
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
   const allHandler = async () => {
-    setMode("all");
-    const data = await dispatch(
-      getTransactionAsync({
-        type: "all",
-        sort: sort,
-        duration: "all",
-        page: page,
-        fetchOnly: false,
-        pagination: true,
-        rpp,
-      })
-    );
-    setPage(1);
-    setTransactions(data.payload.transactions);
-    setTotalPages(Math.ceil(data.payload.count / rpp));
+    try {
+      setMode("all");
+      const data = await dispatch(
+        getTransactionAsync({
+          type: "all",
+          sort: sort,
+          duration: "all",
+          page: page,
+          fetchOnly: false,
+          pagination: true,
+          rpp,
+        })
+      );
+      setPage(1);
+      if (!!data.payload) {
+        setTransactions(data.payload.transactions);
+        setTotalPages(Math.ceil(data.payload.count / rpp));
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const sortChangeHandler = async () => {
-    const data = await dispatch(
-      getTransactionAsync({
-        type: mode,
-        sort: (sortRef.current.value ??= "recent"),
-        duration: "all",
-        page: page,
-        fetchOnly: false,
-        pagination: true,
-        rpp,
-      })
-    );
-    console.log(data);
-    setPage(1);
-    setTransactions(data.payload);
-    setTotalPages(Math.ceil(data.payload.count / rpp));
+    try {
+      const data = await dispatch(
+        getTransactionAsync({
+          type: mode,
+          sort: (sortRef.current.value ??= "recent"),
+          duration: "all",
+          page: page,
+          fetchOnly: false,
+          pagination: true,
+          rpp,
+        })
+      );
+      // console.log(data);
+      setPage(1);
+      if (!!data.payload) {
+        setTransactions(data.payload.transactions);
+        setTotalPages(Math.ceil(data.payload.count / rpp));
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const incrementPage = () => {
@@ -142,51 +170,54 @@ const Transactions = (props) => {
     setPage(page - 1);
   };
 
-  const [width, setWidth] = useState(0);
-
   useEffect(() => {
-    const pageChange = async () => {
-      console.log(window.innerWidth);
-      setWidth(window.innerWidth);
-      const data = await dispatch(
-        getTransactionAsync({
-          type: mode,
-          sort: "recent",
-          duration: "all",
-          page: page,
-          fetchOnly: false,
-          pagination: true,
-          rpp,
-        })
-      );
-      console.log(data);
-      if (!!data.payload) {
-        setTransactions(data.payload.transactions);
-        setTotalPages(Math.ceil(data.payload.count / rpp));
-      }
-    };
-    pageChange();
+    try {
+      const pageChange = async () => {
+        const data = await dispatch(
+          getTransactionAsync({
+            type: mode,
+            sort: "recent",
+            duration: "all",
+            page: page,
+            fetchOnly: false,
+            pagination: true,
+            rpp,
+          })
+        );
+        // console.log(data);
+        if (!!data.payload) {
+          setTransactions(data.payload.transactions);
+          setTotalPages(Math.ceil(data.payload.count / rpp));
+        }
+      };
+      pageChange();
+    } catch (error) {
+      console.log(error);
+    }
   }, [page, rpp]);
 
   const rppChangeHandler = () => {
-    setPage(1);
-    setRpp(rppRef.current.value);
-    localStorage.setItem("rpp", rppRef.current.value);
+    try {
+      setPage(1);
+      setRpp(rppRef.current.value);
+      localStorage.setItem("rpp", rppRef.current.value);
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <>
       <div className={`${style.root} App ${dark && "dark"}`}>
         <div className={style.left}>
-          {width > 500 && emailVerified && !!photoUrl && !!userName && (
-            <LeftNavbar />
-          )}
+          {emailVerified && !!photoUrl && !!userName && <LeftNavbar />}
         </div>
         <div className={style.right}>
-          <Navbar />
-          <Section>
+          <Navbar showPremium={true} location={"Transactions"} />
+          <Section style={{ padding: "5rem 1rem" }}>
             {emailVerified && !!photoUrl && !!userName && (
               <>
                 <Expenses
+                  editable={true}
                   className={style.expenses}
                   transactions={transactions}
                 >
@@ -307,7 +338,7 @@ const Transactions = (props) => {
                 }
               </>
             )}
-            {width < 500 && emailVerified && !!photoUrl && !!userName && (
+            {emailVerified && !!photoUrl && !!userName && (
               <BottomNavbar></BottomNavbar>
             )}
           </Section>

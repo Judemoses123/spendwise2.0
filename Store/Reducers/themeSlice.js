@@ -9,15 +9,16 @@ const themeSlice = createSlice({
   initialState: initialThemeState,
   reducers: {
     toggleDark(state, action) {
+      state.dark = !state.dark;
+    },
+    setDark(state, action) {
       state.dark = action.payload;
     },
-
-    getDark(state, action) {},
-
     toggleOverlay(state, action) {
       state.overlay = action.payload;
     },
   },
 });
-export const { toggleDark, getDark, toggleOverlay } = themeSlice.actions;
+export const { toggleDark, getDark, toggleOverlay, setDark } =
+  themeSlice.actions;
 export default themeSlice.reducer;

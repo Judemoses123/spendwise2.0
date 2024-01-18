@@ -1,26 +1,21 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import style from "./Navbar.module.css";
 import MenuIcon from "@mui/icons-material/Menu";
 import ProfileModal from "../profileComponents/ProfileModal";
 import { useDispatch, useSelector } from "react-redux";
-import { toggleDark } from "../../Store/Reducers/themeSlice";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import { useRouter } from "next/router";
 import toggleDarkAsync from "@/Store/asyncThunk/toggleDarkAsync";
-import getDarkAsync from "@/Store/asyncThunk/getDarkAsync";
-import CloseIcon from "@mui/icons-material/Close";
 import PremiumBanner from "../premiumComponents/premiumBanner";
-const Navbar = () => {
+const Navbar = (props) => {
   const isPremium = useSelector((state) => state.profile.isPremium);
   const [showPremiumModal, setShowPremiumModal] = useState(false);
   const router = useRouter();
   const location = router.pathname;
-  // console.log(router.pathname);
-  // console.log(router.asPath);
   const [showProfileModal, setShowProfileModal] = useState(false);
   const dispatch = useDispatch();
-  dispatch(getDarkAsync());
+
   const toggleShowProfileModal = () => {
     setShowProfileModal((prev) => !prev);
   };
@@ -28,7 +23,7 @@ const Navbar = () => {
     setShowPremiumModal((prev) => !prev);
   };
   const toggleTheme = () => {
-    dispatch(toggleDarkAsync(!dark));
+    dispatch(toggleDarkAsync());
   };
 
   const photoUrl = useSelector((state) => state.profile.photoUrl);
@@ -39,12 +34,12 @@ const Navbar = () => {
   return (
     <div className={dark ? style.navbarBodyDark : style.navbarBody}>
       <ul className={style.navbarList}>
-        {location !== "/account" && location !== "/" && (
+        {props.location && location !== "/account" && location !== "/" && (
           <div
             className={`${style.logoLocation}`}
             style={{ color: dark && "#cecece" }}
           >
-            {location.substring(1, location.length)}
+            {props.location}
           </div>
         )}
         {(location === "/account" || location === "/") && (
@@ -56,7 +51,7 @@ const Navbar = () => {
       </ul>
 
       <div className={style.container}>
-        {location != "/" && !isPremium && (
+        {props.showPremium && !isPremium && (
           <div>
             <button
               onClick={togglePremiumModal}

@@ -7,22 +7,17 @@ import getExpenseCategories from "@/Store/asyncThunk/getExpenseCategories";
 
 ChartJs.register(ArcElement, Tooltip, Legend);
 const PieChart = (props) => {
-  const transactions = useSelector((state) => state.transaction.transactions);
-  // console.log(transactions);
-  const [categoryExpenses, setCategoryExpenses] = useState({});
-  const [sortedCategoryExpenses, setSortedCategoryExpenses] = useState({});
   const [labels, setLabel] = useState([]);
   const [amount, setAmount] = useState([]);
-  const [expenses, setExpenses] = useState([]);
   const dispatch = useDispatch();
   const dark = useSelector((state) => state.theme.dark);
-  useState(categoryExpenses);
   useEffect(() => {
     async function func() {
       const data = await dispatch(getExpenseCategories());
-      console.log(data);
-      setLabel(data.payload.arr.map((item) => item.category));
-      setAmount(data.payload.arr.map((item) => item.totalAmount));
+      if (data.payload) {
+        setLabel(data.payload.arr.map((item) => item.category));
+        setAmount(data.payload.arr.map((item) => item.totalAmount));
+      }
     }
     func();
   }, []);
@@ -60,6 +55,7 @@ const PieChart = (props) => {
       style={{
         backgroundColor: dark ? "black" : "white",
         color: dark && "white",
+        border: !dark ? "1px solid lightgrey" : "1px solid #535353",
       }}
     >
       <div className={style.header}>Top Spendings</div>

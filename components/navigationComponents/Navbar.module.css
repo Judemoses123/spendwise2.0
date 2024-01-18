@@ -37,7 +37,7 @@
   height: 100%;
   padding: 0 1rem;
   justify-content: flex-end;
-  @media (max-width: 500px) {
+  @media (max-width: 768px) {
     flex-direction: row-reverse;
   }
 }
@@ -48,7 +48,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  @media (max-width: 500px) {
+  @media (max-width: 768px) {
     display: none;
   }
 }
@@ -68,7 +68,7 @@
   display: flex;
   align-items: center;
   justify-content: start;
-  @media (max-width: 500px) {
+  @media (max-width: 768px) {
   }
 }
 .logoLocation {
@@ -87,7 +87,7 @@
   justify-content: start;
   text-transform: capitalize;
   width: 30vw;
-  @media (max-width: 500px) {
+  @media (max-width: 768px) {
     width: 50vw;
   }
 }
@@ -123,7 +123,7 @@
   padding: 1rem;
   box-sizing: border-box;
   font-size: small;
-  @media (max-width: 750px) {
+  @media (max-width: 768px) {
     display: none;
   }
 }
@@ -139,7 +139,7 @@
   align-items: center;
   justify-content: center;
   display: none;
-  @media (min-width: 500px) {
+  @media (min-width: 768px) {
     display: none;
   }
 }
@@ -184,4 +184,3 @@
   background-position: center;
   color: white;
 }
-

@@ -1,12 +1,12 @@
 .main {
   width: 100%;
-  padding: 5rem 1rem 5rem 1rem;
+  padding: 4rem 0rem 0rem 0rem;
   box-sizing: border-box;
   position: relative;
-  height: inherit;
+  height: auto;
   overflow-x: hidden;
   overflow-y: auto;
-  @media (max-width: 500px) {
+  @media (max-width: 768px) {
     overflow: auto;
     height: 100%;
     width: 100vw;

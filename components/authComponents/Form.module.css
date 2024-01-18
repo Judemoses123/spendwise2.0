@@ -1,79 +1,75 @@
 .container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 30vw;
-    margin: 0rem auto;
-    @media (max-width: 900px) {
-      width: 50vw;
-    }
-    @media (max-width: 500px) {
-      width: calc(100vw - 4rem);
-    }
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 30vw;
+  margin: 0rem auto;
+  @media (max-width: 768px) {
+    width: calc(100vw - 4rem);
   }
-  .formBody {
-    width: 100%;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    /* height: 50vh; */
-    width: 100%;
-    padding: 2rem 1rem;
-    /* border: 1px solid grey; */
-    background: white;
-    border-radius: 1rem;
-    align-items: center;
-    justify-content: space-between;
-    margin: 1rem 35vw 0 35vw;
-    box-sizing: border-box;
-    backdrop-filter: blur(10px);
-    box-shadow: 1px 1px 5px rgb(214, 214, 214);
-  }
-  .formFields {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-    padding: 1rem 0;
-    position: relative;
-  }
-  .formInput {
-    padding: 0.6rem 0.6rem;
-    width: 100%;
-    margin: 0.6rem 0;
-    position: relative;
-  }
-  .formButton {
-    padding: 0.8rem;
-    font-size: 1rem;
-    width: 100%;
-    border-radius: 1rem;
-    border: 0;
-    background: #0095f6;
-    color: white;
-  }
-  .formModeSwitch {
-    background: rgb(232, 247, 240);
-    /* border: 1px solid rgb(136 193 155); */
-    width: 100%;
-    margin-left: 0rem;
-    margin-top: 1rem;
-    padding: 2vh 0rem;
-    border-radius: 5px;
-    align-items: center;
-    display: flex;
-    justify-content: center;
-    box-shadow: 1px 1px 1px rgb(136 193 155);
-  }
-  .formInputContainer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    position: relative;
-  }
-  .passwordVisbilityEye {
-    position: absolute;
-    right: 0.5rem;
-  }
-  
+}
+.formBody {
+  width: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  /* height: 50vh; */
+  width: 100%;
+  padding: 2rem 1rem;
+  /* border: 1px solid grey; */
+  background: white;
+  border-radius: 1rem;
+  align-items: center;
+  justify-content: space-between;
+  margin: 1rem 35vw 0 35vw;
+  box-sizing: border-box;
+  backdrop-filter: blur(10px);
+  /* box-shadow: 1px 1px 5px rgb(214, 214, 214); */
+}
+.formFields {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding: 1rem 0;
+  position: relative;
+}
+.formInput {
+  padding: 0.6rem 0.6rem;
+  width: 100%;
+  margin: 0.6rem 0;
+  position: relative;
+}
+.formButton {
+  padding: 0.8rem;
+  font-size: 1rem;
+  width: 100%;
+  border-radius: 1rem;
+  border: 0;
+  background: #0095f6;
+  color: white;
+}
+.formModeSwitch {
+  /* background: rgb(232, 247, 240); */
+  /* border: 1px solid rgb(136 193 155); */
+  width: 100%;
+  margin-left: 0rem;
+  margin-top: 1rem;
+  padding: 2vh 0rem;
+  border-radius: 5px;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  /* box-shadow: 1px 1px 1px rgb(136 193 155); */
+}
+.formInputContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  position: relative;
+}
+.passwordVisbilityEye {
+  position: absolute;
+  right: 0.5rem;
+}

@@ -13,7 +13,7 @@ const UpdateProfile = () => {
 
   return (
     <>
-      <Navbar />
+      <Navbar location={'Update Profile'}/>
       <Section>
         <div className={`${style.main} App`}>
           <div className={style.left}></div>

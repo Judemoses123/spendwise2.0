@@ -1,4 +1,3 @@
-import { useState } from "react";
 import Form from "../components/authComponents/Form";
 import Navbar from "../components/navigationComponents/Navbar";
 import Section from "@/components/uiComponents/Section";
@@ -14,15 +13,19 @@ const Account = () => {
   const router = useRouter();
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   useEffect(() => {
-    async function validity() {
-      const response = await dispatch(setIdTokenAsync());
-      if (!isLoggedIn) {
-        router.replace("/");
-      } else {
-        router.replace("/dashboard");
+    try {
+      async function validity() {
+        const response = await dispatch(setIdTokenAsync());
+        if (!isLoggedIn) {
+          router.replace("/");
+        } else {
+          router.replace("/dashboard");
+        }
       }
+      validity();
+    } catch (error) {
+      console.log(error);
     }
-    validity();
   }, [isLoggedIn]);
   return (
     <>

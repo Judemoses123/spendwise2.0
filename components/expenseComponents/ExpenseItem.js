@@ -2,7 +2,7 @@ import style from "./ExpenseItem.module.css";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { useDispatch } from "react-redux";
-import { useContext, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import editTransactionAsync from "@/Store/asyncThunk/editTransactionAsync";
 import { useSelector } from "react-redux";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
@@ -72,7 +72,9 @@ const ExpenseItem = (props) => {
                 color: dark ? " white" : "dimgrey",
               }}
             >
-              <b>{new Date(props.date).toLocaleDateString().replace(" ", ", ")}</b>
+              <b>
+                {new Date(props.date).toLocaleDateString().replace(" ", ", ")}
+              </b>
             </div>
             <div className={style.category}>
               {props.type == "expense" ? props.category : props.source}
@@ -143,27 +145,45 @@ const ExpenseItem = (props) => {
           </>
         )}
 
-        <div className={style.moreDrawer}>
-          <button
-            className={style.moreDrawerButton}
-            onClick={toggleShowOptions}
-            style={{ color: dark ? "white" : "" }}
-          >
-            <MoreVertIcon />
-          </button>
-          {showOptions && (
-            <div
-              className={style.overlay}
-              style={{
-                backgroundColor: dark ? "black" : "white",
-                color: dark ? "white" : "black",
-              }}
+        {props.editable && (
+          <div className={style.moreDrawer}>
+            <button
+              className={style.moreDrawerButton}
+              onClick={toggleShowOptions}
+              style={{ color: dark ? "white" : "" }}
             >
-              <span>Options</span>
-              <button name="menu" onClick={editHandler} className={style.edit}>
-                {showEditor ? (
-                  "Submit"
-                ) : (
+              <MoreVertIcon />
+            </button>
+            {showOptions && (
+              <div
+                className={style.overlay}
+                style={{
+                  backgroundColor: dark ? "black" : "white",
+                  color: dark ? "white" : "black",
+                }}
+              >
+                <span>Options</span>
+                <button
+                  name="menu"
+                  onClick={editHandler}
+                  className={style.edit}
+                >
+                  {showEditor ? (
+                    "Submit"
+                  ) : (
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "0.5rem",
+                        fontSize: "1rem",
+                      }}
+                    >
+                      <EditIcon /> Edit
+                    </div>
+                  )}
+                </button>
+                <button onClick={deleteHandler} className={style.delete}>
                   <div
                     style={{
                       display: "flex",
@@ -172,26 +192,14 @@ const ExpenseItem = (props) => {
                       fontSize: "1rem",
                     }}
                   >
-                    <EditIcon /> Edit
+                    <DeleteIcon />
+                    Delete
                   </div>
-                )}
-              </button>
-              <button onClick={deleteHandler} className={style.delete}>
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "0.5rem",
-                    fontSize: "1rem",
-                  }}
-                >
-                  <DeleteIcon />
-                  Delete
-                </div>
-              </button>
-            </div>
-          )}
-        </div>
+                </button>
+              </div>
+            )}
+          </div>
+        )}
         <div className={style.filler}></div>
       </div>
     </>

@@ -51,19 +51,20 @@
   flex-direction: row;
   height: 100%;
   overflow-x: hidden !important;
-  /* @media (max-width: 500px) {
+  @media (max-width:  768px) {
     flex-direction: column-reverse;
-  } */
+  }
 }
 .left {
   width: min-content;
-  /* @media (max-width: 500px) {
+  @media (max-width:  768px) {
     position: fixed;
     bottom: 0;
     width: 100%;
     height: 4rem;
     z-index: 1000;
-  } */
+    display: none;
+  }
 }
 .right {
   overflow-x: hidden;
@@ -80,15 +81,15 @@
   width: 100%;
   height: min-content;
   justify-content: center;
-  @media (max-width:500px) {
+  @media (max-width:  768px) {
     display: none;
   }
 }
-.lineMobile{
+.lineMobile {
   width: 100%;
   height: min-content;
   justify-content: center;
-  @media (min-width:500px) {
+  @media (min-width:  768px) {
     display: none;
   }
 }
@@ -105,4 +106,15 @@
   width: 100%;
   /* background-color: red; */
   padding-bottom: 1rem;
+}
+
+.lineChart {
+  @media (max-width:  768px) {
+    display: none;
+  }
+}
+.lineChartMobile {
+  @media (min-width:  768px) {
+    display: none;
+  }
 }

@@ -41,7 +41,7 @@ const Utilities = (props) => {
           pagination: false,
         })
       ).then((response) => {
-        if (response) {
+        if (response.payload) {
           setTotalIncome(response.payload.stats);
         }
       });
@@ -56,7 +56,7 @@ const Utilities = (props) => {
           pagination: false,
         })
       ).then((response) => {
-        if (response) {
+        if (response.payload) {
           // console.log(response);
           setTotalExpenses(response.payload.stats);
         }
@@ -72,7 +72,7 @@ const Utilities = (props) => {
           pagination: false,
         })
       ).then((response) => {
-        if (response) {
+        if (response.payload) {
           // console.log(response);
           setMonthlyExpenses(response.payload.stats);
         }
@@ -87,7 +87,7 @@ const Utilities = (props) => {
           pagination: false,
         })
       ).then((response) => {
-        if (response) {
+        if (response.payload) {
           // console.log(response);
           setWeeklyExpenses(response.payload.stats);
         }

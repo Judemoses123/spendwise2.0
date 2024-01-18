@@ -1,7 +1,6 @@
 import { useRef, useState } from "react";
 import style from "./ExpenseForm.module.css";
 import { useDispatch, useSelector } from "react-redux";
-import activatePremiumAsync from "../../Store/asyncThunk/activatePremiumAsync";
 import CloseIcon from "@mui/icons-material/Close";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
@@ -13,8 +12,6 @@ const ExpenseForm = () => {
   const dateInputRef = useRef();
   const SourceInputRef = useRef();
   const dispatch = useDispatch();
-  // const totalExpense = useSelector((state) => state.expense.totalExpense);
-  // const expenseLimit = useSelector((state) => state.expense.expenseLimit);
   const isPremium = useSelector((state) => state.profile.isPremium);
   const sumbitExpenseHandler = (event) => {
     event.preventDefault();
@@ -80,7 +77,10 @@ const ExpenseForm = () => {
   return (
     <div
       className={showForm ? style.form : style.minimizeForm}
-      style={{ background: dark ? "black" : "white" }}
+      style={{
+        background: dark ? "black" : "white",
+        border: !dark ? "1px solid lightgrey" : "1px solid #535353",
+      }}
     >
       {showForm && (
         <>

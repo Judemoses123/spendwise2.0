@@ -101,8 +101,12 @@ const LineChart = (props) => {
     );
 
     //Transaction Sum
-    const incomeStats = incomeTransactions.payload.stats;
-    const expenseStats = expenseTransactions.payload.stats;
+    const incomeStats = !!incomeTransactions.payload
+      ? incomeTransactions.payload.stats
+      : 0;
+    const expenseStats = !!expenseTransactions.payload
+      ? expenseTransactions.payload.stats
+      : 0;
 
     setStats(incomeStats - expenseStats);
 
@@ -234,10 +238,11 @@ const LineChart = (props) => {
 
   return (
     <div
-      className={`${style.container}`}
+      className={`${style.container} ${props.className & props.className}`}
       style={{
         background: dark ? "black" : "white",
         color: dark && "white",
+        border: !dark ? "1px solid lightgrey" : "1px solid #535353",
       }}
     >
       <div className={style.header}>

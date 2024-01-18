@@ -1,8 +1,8 @@
 import Link from "next/link";
 import style from "./BottomNavbar.module.css";
-import DashboardIcon from "@mui/icons-material/Dashboard";
-import CurrencyExchangeIcon from "@mui/icons-material/CurrencyExchange";
-import AnalyticsIcon from "@mui/icons-material/Analytics";
+import SpaceDashboardIcon from "@mui/icons-material/SpaceDashboard";
+import PaidIcon from "@mui/icons-material/Paid";
+import PieChartIcon from "@mui/icons-material/PieChart";
 import ArticleIcon from "@mui/icons-material/Article";
 import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
@@ -17,7 +17,7 @@ const BottomNavbar = () => {
         }`}
         href={"/dashboard"}
       >
-        <DashboardIcon />
+        <SpaceDashboardIcon />
       </Link>
       <Link
         className={`${dark ? style.iconDark : style.icon} ${
@@ -25,7 +25,7 @@ const BottomNavbar = () => {
         }`}
         href={"/transactions"}
       >
-        <CurrencyExchangeIcon />
+        <PaidIcon />
       </Link>
       <Link
         className={`${dark ? style.iconDark : style.icon} ${
@@ -33,7 +33,7 @@ const BottomNavbar = () => {
         }`}
         href={"/analysis"}
       >
-        <AnalyticsIcon />
+        <PieChartIcon />
       </Link>
       <Link
         className={`${dark ? style.iconDark : style.icon} ${

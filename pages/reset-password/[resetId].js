@@ -1,44 +1,53 @@
 import Navbar from "@/components/navigationComponents/Navbar";
 import Section from "@/components/uiComponents/Section";
-import style from "./ResetPassword.module.css";
-import { useState, useRef } from "react";
 import RefreshIcon from "@mui/icons-material/Refresh";
-import { useDispatch } from "react-redux";
-import resetPasswordAsync from "@/Store/asyncThunk/resetPasswordAsync";
+import style from "./ResetPassword.module.css";
+import { useRef, useState } from "react";
 import { useRouter } from "next/router";
-import '../../app/globals.css';
-const ResetPassword = () => {
-  const emailInputRef = useRef();
+import { useDispatch } from "react-redux";
+import updatePassword from "@/Store/asyncThunk/updatePassword";
+import { useParams } from "next/navigation";
+
+const resetId = () => {
+  const passwordInputRef = useRef();
   const [message, setMessage] = useState("");
   const [status, setStatus] = useState("");
   const router = useRouter();
   const dispatch = useDispatch();
+  const params = useParams();
   const sumbitHandler = async (event) => {
     event.preventDefault();
-    const enteredEmail = emailInputRef.current.value;
-    console.log(enteredEmail);
-    dispatch(resetPasswordAsync(enteredEmail));
-  };
-  const successHandler = () => {
-    router.push("/account");
+    const password = passwordInputRef.current.value;
+    console.log({ password, resetId: params.resetId });
+    // const msg = await AuthCTX.passwordReset(enteredEmail);
+    const response = await dispatch(
+      updatePassword({ password, uuid: params.resetId })
+    );
+    if (response.payload.status == "success") {
+      setTimeout(() => {
+        router.replace("http://localhost:3000/");
+      }, 5000);
+    }
+    console.log(response.payload);
+    setMessage(response.payload.message);
   };
   return (
     <>
-      <Navbar location={'Forgot Password'}/>
-      <Section style={{padding:'5rem 1rem'}} />
+      <Navbar location={"Reset Password"} />
+      <Section style={{ padding: "5rem 1rem" }} />
       <div className={`${style.container} App`} style={{ margin: "0 auto" }}>
         <form onSubmit={sumbitHandler} className={style.formBody}>
           <span style={{ fontSize: "1.2rem", fontWeight: "500" }}>
-            Forgot Password
+            Reset Password
           </span>
           <div className={style.formFields}>
-            <span style={{}}>Enter your registered email address</span>
+            <span style={{}}>Enter New Password</span>
             <div className={style.formInputContainer}>
               <input
-                ref={emailInputRef}
+                ref={passwordInputRef}
                 className={style.formInput}
-                type="email"
-                placeholder="Email"
+                type="password"
+                placeholder="Enter Password"
               ></input>
             </div>
           </div>
@@ -65,20 +74,6 @@ const ResetPassword = () => {
                 }}
               >
                 {message}
-                <button
-                  onClick={sumbitHandler}
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    border: "0",
-                    backgroundColor: "transparent",
-                    fontWeight: "bold",
-                    color: "grey",
-                  }}
-                >
-                  <RefreshIcon />
-                  Resend
-                </button>
               </span>
               {status == "success" && (
                 <button
@@ -97,11 +92,11 @@ const ResetPassword = () => {
             </div>
           )}
           {!(status == "success") && (
-            <button className={style.formButton}>Send Link</button>
+            <button className={style.formButton}>Update Password</button>
           )}
         </form>
       </div>
     </>
   );
 };
-export default ResetPassword;
+export default resetId;

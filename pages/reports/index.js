@@ -16,159 +16,207 @@ import JsPDF from "jspdf";
 import { useReactToPrint } from "react-to-print";
 import Papa from "papaparse";
 import BottomNavbar from "@/components/navigationComponents/BottomNavbar";
+import downloadTransactionsAsync from "@/Store/asyncThunk/downloadTransactionsAsync";
+import ReportList from "@/components/reportComponents/reportList";
 const Reports = () => {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const router = useRouter();
   const dispatch = useDispatch();
-  const [message, setMessage] = useState("");
-  const idToken = useSelector((state) => state.auth.idToken);
   const emailVerified = useSelector((state) => state.profile.emailVerified);
   const photoUrl = useSelector((state) => state.profile.photoUrl);
   const userName = useSelector((state) => state.profile.displayName);
   const dark = useSelector((state) => state.theme.dark);
   const sortRef = useRef();
-  const [ref, setRef] = useState();
-  const [sortedData, setSortedData] = useState([]);
   const expensesRef = useRef();
   const [transactions, setTransactions] = useState([]);
-
-  useEffect(() => {
-    async function validity() {
-      const response = await dispatch(setIdTokenAsync());
-      if (!isLoggedIn) {
-        router.replace("/");
-      } else {
-        router.replace("/reports");
-        await allHandler();
-        const data = await dispatch(
-          getTransactionAsync({
-            type: mode,
-            sort: (sortRef.current.value ??= "recent"),
-            duration: "all",
-            page: '1',
-            fetchOnly: false,
-            pagination: false,
-          })
-        );
-        console.log(data);
-        setTransactions(data.payload.transactions);
-      }
-    }
-    validity();
-  }, [isLoggedIn]);
-
   const [mode, setMode] = useState("all");
+  const [reports, setReports] = useState([]);
   const [sort, setSort] = useState(
     !!sortRef.current ? sortRef.current.value : "recent"
   );
+  const token = useSelector((state) => state.auth.token);
+  useEffect(() => {
+    try {
+      async function validity() {
+        const response = await dispatch(setIdTokenAsync());
+        if (!isLoggedIn) {
+          router.replace("/");
+        } else {
+          router.replace("/reports");
+          await allHandler();
+          const data = await dispatch(
+            getTransactionAsync({
+              type: mode,
+              sort: sortRef.current ? sortRef.current.value : "recent",
+              duration: "all",
+              page: "1",
+              fetchOnly: false,
+              pagination: false,
+            })
+          );
+          // console.log(data);
+          if (data.payload) setTransactions(data.payload.transactions);
+          getReports();
+        }
+      }
+      validity();
+    } catch (error) {
+      console.log(error);
+    }
+  }, [isLoggedIn]);
 
   const incomeHandler = async () => {
-    setMode("income");
-    const data = await dispatch(
-      getTransactionAsync({
-        type: "income",
-        sort: sort,
-        duration: "all",
-        page: "1",
-        fetchOnly: true,
-        pagination: false,
-      })
-    );
-    setTransactions(data.payload.transactions);
+    try {
+      setMode("income");
+      const data = await dispatch(
+        getTransactionAsync({
+          type: "income",
+          sort: sort,
+          duration: "all",
+          page: "1",
+          fetchOnly: true,
+          pagination: false,
+        })
+      );
+      if (data.payload) setTransactions(data.payload.transactions);
+    } catch (error) {
+      console.log(error);
+    }
   };
   const expenseHandler = async () => {
-    setMode("expense");
-    const data = await dispatch(
-      getTransactionAsync({
-        type: "expense",
-        sort: sort,
-        duration: "all",
-        page: "1",
-        fetchOnly: true,
-        pagination: false,
-      })
-    );
-    setTransactions(data.payload.transactions);
+    try {
+      setMode("expense");
+      const data = await dispatch(
+        getTransactionAsync({
+          type: "expense",
+          sort: sort,
+          duration: "all",
+          page: "1",
+          fetchOnly: true,
+          pagination: false,
+        })
+      );
+      if (data.payload) setTransactions(data.payload.transactions);
+    } catch (error) {
+      console.log(error);
+    }
   };
   const allHandler = async () => {
-    setMode("all");
-    const data = await dispatch(
-      getTransactionAsync({
-        type: "all",
-        sort: sort,
-        duration: "all",
-        page: "1",
-        fetchOnly: true,
-        pagination: false,
-      })
-    );
-    setTransactions(data.payload.transactions);
+    try {
+      setMode("all");
+      const data = await dispatch(
+        getTransactionAsync({
+          type: "all",
+          sort: sort,
+          duration: "all",
+          page: "1",
+          fetchOnly: true,
+          pagination: false,
+        })
+      );
+      if (data.payload) setTransactions(data.payload.transactions);
+    } catch (error) {
+      console.log(error);
+    }
   };
-
+  //getPreviousReports
+  const getReports = async () => {
+    try {
+      const response = await fetch(`http://localhost:8080/getReports`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authentication: token,
+        },
+      });
+      if (!response.ok) {
+        throw new Error("getReportsFailed");
+      }
+      const data = await response.json();
+      // console.log(data);
+      setReports(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  //
   const sortChangeHandler = async () => {
-    const data = await dispatch(
-      getTransactionAsync({
-        type: mode,
-        sort: sortRef.current.value,
-        duration: "all",
-        page: "1",
-        fetchOnly: true,
-        pagination: false,
-      })
-    );
-    setTransactions(data.payload.transactions);
+    try {
+      const data = await dispatch(
+        getTransactionAsync({
+          type: mode,
+          sort: sortRef.current.value,
+          duration: "all",
+          page: "1",
+          fetchOnly: true,
+          pagination: false,
+        })
+      );
+      if (data.payload) setTransactions(data.payload.transactions);
+    } catch (error) {
+      console.log(error);
+    }
   };
-
+  //csv
   const printHandler = useReactToPrint({
     content: () => document.getElementById("transaction-list"),
   });
-  const downloadHandler = (transactions) => {
-    const csv = Papa.unparse(transactions);
-
-    const blob = new Blob([csv], { type: "text/csv" });
-
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.style.display = "none";
-    a.href = url;
-    a.download = "transactions.csv";
-    document.body.appendChild(a);
-    a.click();
-    window.URL.revokeObjectURL(url);
+  const openInNewTab = (url) => {
+    try {
+      const newTab = window.open(url, "_blank");
+      newTab.focus();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  //pdf
+  const downloadHandler = async (transactions) => {
+    try {
+      const payload = {
+        type: mode,
+        sort: sort,
+      };
+      const data = await dispatch(downloadTransactionsAsync(payload));
+      console.log(data);
+      if (data.payload.status === "success") {
+        openInNewTab(data.payload.fileUrl);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const clickHandler = (data) => {
-    if (data.fileType === "pdf") {
-      printHandler();
-    }
-    if (data.fileType === "csv") {
-      downloadHandler(sortedData);
+    try {
+      if (data.fileType === "pdf") {
+        downloadHandler();
+      }
+      if (data.fileType === "csv") {
+        printHandler();
+      }
+      getReports();
+    } catch (error) {
+      console.log(error);
     }
   };
 
   const getData = (data) => {
     return data;
   };
-  const [width, setWidth] = useState(0);
 
-  useEffect(() => {
-    console.log(window.innerWidth);
-    setWidth(window.innerWidth);
-  }, []);
   return (
     <>
       <div className={`${style.root} App ${dark && "dark"}`}>
         <div className={style.left}>
-          {width > 500 && emailVerified && !!photoUrl && !!userName && (
-            <LeftNavbar />
-          )}
+          {emailVerified && !!photoUrl && !!userName && <LeftNavbar />}
         </div>
         <div className={style.right}>
-          <Navbar />
-          <Section>
+          <Navbar showPremium={true} location={"Reports"} />
+          <Section style={{ padding: "5rem 1rem" }}>
             {emailVerified && !!photoUrl && !!userName && (
               <div>
-                <div ref={expensesRef}>
+                <div className={style.gridContainer} ref={expensesRef}>
+                  <ReportList reports={reports} />
                   <Expenses
                     transactions={transactions}
                     mode={mode}
@@ -181,6 +229,9 @@ const Reports = () => {
                       style={{
                         backgroundColor: dark && "black",
                         color: dark && "white",
+                        borderBottom: dark
+                          ? "1px solid #535353 "
+                          : "1px solid lightgrey",
                       }}
                     >
                       <div className={style.type}>
@@ -253,9 +304,7 @@ const Reports = () => {
                 <ReportComponents clickHandler={clickHandler} />
               </div>
             )}
-            {width < 500 && emailVerified && !!photoUrl && !!userName && (
-              <BottomNavbar />
-            )}
+            {emailVerified && !!photoUrl && !!userName && <BottomNavbar />}
           </Section>
         </div>
       </div>

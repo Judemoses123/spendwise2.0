@@ -20,7 +20,6 @@ const Home = () => {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const router = useRouter();
   const dispatch = useDispatch();
-  const [message, setMessage] = useState("");
   const emailVerified = useSelector((state) => state.profile.emailVerified);
   const photoUrl = useSelector((state) => state.profile.photoUrl);
   const userName = useSelector((state) => state.profile.displayName);
@@ -30,44 +29,41 @@ const Home = () => {
   );
   const [transactions, setTransactions] = useState([]);
   useEffect(() => {
-    async function validity() {
-      const response = await dispatch(setIdTokenAsync());
-      if (!isLoggedIn) {
-        router.replace("/");
-      } else {
-        router.replace("/dashboard");
-        const data = await dispatch(
-          getTransactionAsync({
-            type: "all",
-            sort: "recent",
-            duration: "all",
-            page: "1",
-            fetchOnly: true,
-            pagination: true,
-          })
-        );
-        console.log(data);
-        setTransactions(data.payload.transactions);
+    try {
+      async function validity() {
+        const response = await dispatch(setIdTokenAsync());
+        if (!isLoggedIn) {
+          router.replace("/");
+        } else {
+          router.replace("/dashboard");
+          const data = await dispatch(
+            getTransactionAsync({
+              type: "all",
+              sort: "recent",
+              duration: "all",
+              page: "1",
+              fetchOnly: true,
+              pagination: true,
+            })
+          );
+          // console.log(data);
+          if (data.payload) setTransactions(data.payload.transactions);
+        }
       }
+      validity();
+    } catch (error) {
+      console.log(error);
     }
-    validity();
   }, [isLoggedIn, alltransactions]);
 
-  const [width, setWidth] = useState(0);
-
-  useEffect(() => {
-    setWidth(window.innerWidth);
-  }, []);
   return (
     <div className={`${style.root} App ${dark && "dark"}`}>
       <div className={style.left}>
-        {width > 500 && emailVerified && !!photoUrl && !!userName && (
-          <LeftNavbar />
-        )}
+        {emailVerified && !!photoUrl && !!userName && <LeftNavbar />}
       </div>
       <div className={style.right}>
-        <Navbar />
-        <Section>
+        <Navbar showPremium={true} location={"Dashboard"} />
+        <Section style={{ padding: "4rem 1rem" }}>
           {(!!!photoUrl || !!!userName) && <ProfileCompletion />}
           {!emailVerified && !!photoUrl && !!userName && <EmailVerification />}
           {emailVerified && !!photoUrl && !!userName && (
@@ -75,16 +71,19 @@ const Home = () => {
               <Utilities showForm={true} />
             </div>
           )}
-          {emailVerified && !!photoUrl && !!userName && width >= 500 && (
-            <div>{width > 500 && <LineChart aspectRatio={4} />}</div>
+          {emailVerified && !!photoUrl && !!userName && (
+            <div className={style.lineChart}>
+              {<LineChart aspectRatio={4} />}
+            </div>
           )}
           {emailVerified && !!photoUrl && !!userName && (
             <div className={style.lineMobile}>
-              {width <= 500 && <LineChart aspectRatio={1} />}
+              {<LineChart className={style.lineChart} aspectRatio={1} />}
             </div>
           )}
           {emailVerified && !!photoUrl && !!userName && (
             <Expenses
+              editable={true}
               mode="all"
               sort="date-recent"
               className={style.expenses}
@@ -99,7 +98,7 @@ const Home = () => {
               </div>
             </Expenses>
           )}
-          {width < 500 && emailVerified && !!photoUrl && !!userName && (
+          {emailVerified && !!photoUrl && !!userName && (
             <BottomNavbar></BottomNavbar>
           )}
         </Section>

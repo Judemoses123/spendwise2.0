@@ -3,14 +3,11 @@ import Navbar from "@/components/navigationComponents/Navbar";
 import Section from "@/components/uiComponents/Section";
 import style from "./analysis.module.css";
 import { useDispatch, useSelector } from "react-redux";
-import getProfileDataAsync from "../../Store/asyncThunk/getProfileDataAsync";
 import setIdTokenAsync from "../../Store/asyncThunk/setIdTokenAsync";
-import getPremiumStateAsync from "../../Store/asyncThunk/getPremiumStateAsync";
 import "../../app/globals.css";
 import ProfileCompletion from "../../components/profileComponents/ProfileCompletion";
 import EmailVerification from "@/components/profileComponents/EmailVerification";
 import LeftNavbar from "@/components/navigationComponents/LeftNavbar";
-import Expenses from "@/components/expenseComponents/Expenses";
 import Utilities from "@/components/graphComponents/Utilities";
 import getTransactionAsync from "../../Store/asyncThunk/getTransactionAsync";
 import LineChart from "@/components/graphComponents/LineChart";
@@ -33,68 +30,77 @@ const Analysis = () => {
   const [score, setScore] = useState(0);
 
   useEffect(() => {
-    async function validity() {
-      const response = await dispatch(setIdTokenAsync());
-      if (!isLoggedIn) {
-        router.replace("/");
-      } else {
-        router.replace("/analysis");
-        const data = await dispatch(
-          getTransactionAsync({
-            type: "all",
-            sort: "recent",
-            duration: "all",
-            page: "1",
-            fetchOnly: false,
-            pagination: true,
-          })
-        );
-        console.log(data);
-        setTransactions(data.payload.transactions);
-        const response = await dispatch(getFinancialHealthScore());
-        console.log(response);
-        setScore(response.payload.score);
+    try {
+      async function validity() {
+        const response = await dispatch(setIdTokenAsync());
+        if (!isLoggedIn) {
+          router.replace("/");
+        } else {
+          router.replace("/analysis");
+          const data = await dispatch(
+            getTransactionAsync({
+              type: "all",
+              sort: "recent",
+              duration: "all",
+              page: "1",
+              fetchOnly: false,
+              pagination: true,
+            })
+          );
+          // console.log(data);
+          if (data.payload) {
+            setTransactions(data.payload.transactions);
+          }
+          const response = await dispatch(getFinancialHealthScore());
+          // console.log(response);
+          if (!!response.payload) {
+            setScore(response.payload.score);
+          }
+        }
       }
+      validity();
+    } catch (error) {
+      console.log(error);
     }
-    validity();
   }, [isLoggedIn]);
 
   useEffect(() => {
-    dispatch(getPremiumStateAsync());
-    dispatch(
-      getTransactionAsync({
-        type: "all",
-        sort: "recent",
-        duration: "all",
-        page: "1",
-        fetchOnly: false,
-        pagination: true,
-      })
-    );
+    try {
+      dispatch(
+        getTransactionAsync({
+          type: "all",
+          sort: "recent",
+          duration: "all",
+          page: "1",
+          fetchOnly: false,
+          pagination: true,
+        })
+      );
+    } catch (error) {
+      console.log(error);
+    }
   }, [userName]);
 
   useEffect(() => {
-    if (!isLoggedIn) {
-      router.replace("/");
+    try {
+      if (!isLoggedIn) {
+        router.replace("/");
+      }
+      dispatch(setIdTokenAsync());
+    } catch (error) {
+      console.log(error);
     }
-    dispatch(setIdTokenAsync());
   }, []);
-  const [width, setWidth] = useState(0);
-  useEffect(() => {
-    console.log(window.innerWidth);
-    setWidth(window.innerWidth);
-  }, []);
+
   return (
     <>
       <div className={`${style.root} App ${dark && "dark"}`}>
         <div className={style.left}>
-          {width > 500 && emailVerified && !!photoUrl && !!userName && (
-            <LeftNavbar />
-          )}
+          {emailVerified && !!photoUrl && !!userName && <LeftNavbar />}
         </div>
         <div className={style.right}>
-          <Navbar />
-          <Section>
+          <Navbar showPremium={true} location={"Analysis"} />
+          <Section style={{ padding: "5rem 1rem" }}>
             {(!!!photoUrl || !!!userName) && <ProfileCompletion />}
             {!emailVerified && !!photoUrl && !!userName && (
               <EmailVerification />
@@ -103,22 +109,23 @@ const Analysis = () => {
               <div className={style.mainGrid}>
                 <div
                   className={
-                    width > 500 ? style.leftGrid : style.leftGridMobile
+                    style.leftGrid
+                    //  : style.leftGridMobile
                   }
                 >
                   <div className={style.utilities}>
                     <Utilities showForm={false} />
                   </div>
-                  {width > 500 && (
+                  {
                     <div className={style.line}>
                       <LineChart aspectRatio={3} />
                     </div>
-                  )}
-                  {width <= 500 && (
+                  }
+                  {
                     <div className={style.lineMobile}>
                       <LineChart aspectRatio={1} />
                     </div>
-                  )}
+                  }
                 </div>
                 <div className={style.rightGrid}>
                   <div className={style.pie}>
@@ -129,6 +136,9 @@ const Analysis = () => {
                     style={{
                       backgroundColor: dark && "black",
                       color: dark && "white",
+                      border: dark
+                        ? "1px solid #535353"
+                        : "1px solid lightgrey",
                     }}
                   >
                     <div className={style.healthScore_img}></div>
@@ -153,7 +163,7 @@ const Analysis = () => {
                 </div>
               </div>
             )}
-            {width < 500 && emailVerified && !!photoUrl && !!userName && (
+            {emailVerified && !!photoUrl && !!userName && (
               <BottomNavbar></BottomNavbar>
             )}
           </Section>

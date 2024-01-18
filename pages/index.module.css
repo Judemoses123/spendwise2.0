@@ -1,24 +1,28 @@
 .main {
   width: 100%;
   box-sizing: border-box;
-  padding: 1rem;
+  /* padding: 1rem; */
   display: grid;
-  grid-template-columns: 2fr 3fr;
+  grid-template-columns: 1fr 1fr;
   /* background-color: orange; */
-  gap: 1rem;
+  /* gap: 1rem; */
   object-fit: contain;
   position: relative;
-  @media (max-width: 550px) {
+  @media (max-width:  768px) {
     display: flex;
     flex-direction: column;
   }
 }
 .left {
-  background-image: url("https://apemcl.ap.gov.in/asset/images/login_illustration.svg");
+  background-image: url("../images/login_illustration.svg");
   background-position: center;
-  background-size: contain;
+  /* background-size: contain; */
   background-repeat: no-repeat;
-  @media (max-width: 550px) {
+  background-image: url(/_next/static/media/login_illustration.a2211a6c.svg);
+  background-position: center;
+  background-repeat: no-repeat;
+  padding: 1rem;
+  @media (max-width:  768px) {
     height: 30vh;
   }
 }
@@ -28,14 +32,16 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  /* justify-content: center; */
+  background: white;
+  padding: 1rem;
 }
 .header {
   font-weight: bold;
   font-size: 2rem;
   margin-bottom: 1rem;
   color: dimgray;
-  @media (max-width: 550px) {
+  @media (max-width:  768px) {
     font-size: 1.5rem;
     /* margin-bottom: 0.5rem; */
   }

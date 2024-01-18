@@ -10,7 +10,6 @@ import loginAsync from "@/Store/asyncThunk/loginAsync";
 import signupAsync from "@/Store/asyncThunk/signupAsync";
 const Form = (props) => {
   const dispatch = useDispatch();
-  // const navigate = useNavigate();
   const router = useRouter();
   const [loginMode, setLoginMode] = useState(true);
   const [dataInvalid, setDataInvalid] = useState(false);

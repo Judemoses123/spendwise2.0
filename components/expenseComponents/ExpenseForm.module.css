@@ -46,7 +46,7 @@
     align-items: center;
     display: flex;
     justify-content: center;
-    @media (max-width: 550px) {
+    @media (max-width: 768px) {
       height: 3rem;
     }
   }
@@ -63,7 +63,7 @@
     gap: 5px;
     height: inherit;
     justify-content: space-between;
-    @media (max-width: 550px) {
+    @media (max-width:  768px) {
       grid-template-columns: 1fr;
       grid-column: span 2;
       height: max-content;

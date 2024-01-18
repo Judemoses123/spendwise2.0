@@ -1,68 +1,63 @@
 .modal {
-    background: white;
-    /* box-shadow: 1px 1px 10px grey; */
-    border-radius: 1.5rem;
-    border: 1px solid lightgray;
-    position: absolute;
-    z-index: 6;
-    width: 30vw;
-    padding: calc(0.5rem - 1px) 1rem 2rem 1rem;
-    top: 0;
-    right: 0.5rem;
-    overflow: hidden;
-    @media (max-width:960px) {
-      width: 50vw;
-    }
-    @media (max-width:500px) {
-      width: 80vw
-    }
+  background: white;
+  /* box-shadow: 1px 1px 10px grey; */
+  border-radius: 1.5rem;
+  border: 1px solid lightgray;
+  position: absolute;
+  z-index: 6;
+  width: 30vw;
+  padding: calc(0.5rem - 1px) 1rem 2rem 1rem;
+  top: 0;
+  right: 0.5rem;
+  overflow: hidden;
+  @media (max-width: 768px) {
+    width: 80vw;
   }
-  
-  
-  .profilePicture{
-      width: 3rem;
-      aspect-ratio: 1;
-      top: 0;
-      border-radius: 100%;
-      background-size: cover;
-      background-position: center;
-  }
-  .container{
-      display: flex;
-      width: 100%;
-      justify-content: space-between;
-      margin-bottom: 0.5rem;
-  }
-  .close{
-      background-color: transparent;
-      border: 0;
-      width: 3rem;
-      height: 3rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: absolute;
-      right: 1rem;
-  }
-  .main{
-      /* background-color: pink; */
-      box-sizing: border-box;
-      padding-bottom: 1rem;
-      margin-bottom: 1rem;
-      border-bottom: 1px solid lightgray;
-  }
-  .options{
-      width: 100%;
-      background-color: cornflowerblue;
-      color: white;
-      padding: 0.5rem 1rem;
-      border-radius: 5px;
-      border: 0;
-      box-sizing: border-box;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      margin: 0.5rem 0;
-  }
-  
+}
+
+.profilePicture {
+  width: 3rem;
+  aspect-ratio: 1;
+  top: 0;
+  border-radius: 100%;
+  background-size: cover;
+  background-position: center;
+}
+.container {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+.close {
+  background-color: transparent;
+  border: 0;
+  width: 3rem;
+  height: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  right: 1rem;
+}
+.main {
+  /* background-color: pink; */
+  box-sizing: border-box;
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid lightgray;
+}
+.options {
+  width: 100%;
+  background-color: cornflowerblue;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  border: 0;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin: 0.5rem 0;
+}

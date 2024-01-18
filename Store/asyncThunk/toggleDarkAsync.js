@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { addTransaction } from "../Reducers/transactionSlice";
 import { createHash } from "crypto";
-import { toggleDark } from "../Reducers/profileSlice";
+import { toggleDark } from "../Reducers/themeSlice";
 
 const toggleDarkAsync = createAsyncThunk(
   "transaction/toggleDarkAsync",
@@ -20,7 +20,8 @@ const toggleDarkAsync = createAsyncThunk(
         throw new Error("Something went Wrong");
       }
       const data = await response.json();
-      dispatch(toggleDark);
+      console.log(data);
+      dispatch(toggleDark());
     } catch (error) {
       console.log(error);
     }

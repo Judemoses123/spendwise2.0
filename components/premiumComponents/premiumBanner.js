@@ -46,7 +46,7 @@ const PremiumBanner = (props) => {
             throw new Error("Payment failed After Initialization");
           }
           const dt = await resp.json();
-          console.log(dt);
+          // console.log(dt);
           if (dt.status === "SUCCESS") {
             alert("Congratulations! Premium Membership Activated.");
           }

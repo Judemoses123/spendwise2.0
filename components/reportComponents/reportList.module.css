@@ -1,0 +1,57 @@
+.main {
+  background-color: white;
+  width: 100%;
+  padding: 0rem 0;
+  box-sizing: border-box;
+  border-radius: 5px;
+  @media (max-width: 768px) {
+    height: 30vh;
+  }
+}
+.header {
+  font-weight: bold;
+  border-bottom: 1px solid grey;
+  /* background-color: orange; */
+  padding: 1rem;
+}
+.body {
+  /* background-color: cyan; */
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  height: calc(100vh - 17rem);
+  @media (max-width: 500px) {
+    height: calc(100% - 6rem);
+  }
+}
+.reportListItem {
+  /* background-color: grey; */
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: start;
+  gap: 0.8rem;
+}
+.reportListItem_left {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.fileIcon {
+  background-image: url("../../images/icons8-file-128.svg");
+  opacity: 0.5;
+  width: 3rem;
+  background-size: contain;
+  height: 3rem;
+  color: grey;
+}
+
+.reportListItem_right {
+  display: flex;
+  flex-direction: column;
+}

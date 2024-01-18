@@ -32,7 +32,7 @@ const profileSlice = createSlice({
     getPremiumState(state, action) {
       state.isPremium = !!action.payload ? action.payload.isPremium : false;
     },
-    toggleDark() {
+    toggleDark(state, action) {
       state.dark = !state.dark;
     },
   },
