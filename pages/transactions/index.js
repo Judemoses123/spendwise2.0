@@ -10,6 +10,7 @@ import LeftNavbar from "@/components/navigationComponents/LeftNavbar";
 import Expenses from "@/components/expenseComponents/Expenses";
 import getTransactionAsync from "../../Store/asyncThunk/getTransactionAsync";
 import BottomNavbar from "@/components/navigationComponents/BottomNavbar";
+import editTransactionAsync from "@/Store/asyncThunk/editTransactionAsync";
 const Transactions = (props) => {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const router = useRouter();
@@ -30,6 +31,23 @@ const Transactions = (props) => {
   const [rpp, setRpp] = useState(10);
   const [transactions, setTransactions] = useState([]);
   const rppRef = useRef();
+  const getData = async (data) => {
+    await dispatch(editTransactionAsync(data));
+    const resp = await dispatch(
+      getTransactionAsync({
+        type: mode,
+        sort: sortRef.current ? sortRef.current.value : "recent",
+        duration: "all",
+        page: 1,
+        fetchOnly: true,
+        pagination: true,
+      })
+    );
+    if (resp.payload) {
+      console.log(resp);
+      setTransactions(resp.payload.transactions);
+    }
+  };
   useEffect(() => {
     try {
       async function validity() {
@@ -217,6 +235,7 @@ const Transactions = (props) => {
             {emailVerified && !!photoUrl && !!userName && (
               <>
                 <Expenses
+                  getData={getData}
                   editable={true}
                   className={style.expenses}
                   transactions={transactions}
@@ -298,6 +317,7 @@ const Transactions = (props) => {
                         display: "flex",
                         flexDirection: "row",
                         gap: "1rem",
+                        color: dark ? "white" : "black",
                       }}
                     >
                       Rows per Page:

@@ -5,7 +5,7 @@ const removeTransactionsAsync = createAsyncThunk(
   "transactions/removeTransactionsAsync",
   async (payload, { dispatch, getState }) => {
     try {
-      const response = await fetch(`http://localhost:8080/deleteTransaction`, {
+      const response = await fetch(`http://54.161.122.179:8080/deleteTransaction`, {
         method: "DELETE",
         body: JSON.stringify(payload),
         headers: {

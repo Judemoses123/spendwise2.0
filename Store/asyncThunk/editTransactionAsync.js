@@ -7,23 +7,15 @@ const editTransactionAsync = createAsyncThunk(
   "expense/editTransactionAsync",
   async (payload, { dispatch, getState }) => {
     try {
-      const username = getState().profile.displayName;
-      console.log(username);
-      const shortenedUsername = username.replace(" ", "");
-      console.log(shortenedUsername);
       console.log(payload);
-      const email = getState().auth.email;
-      const hashCode = createHash("sha1").update(email).digest("hex");
-      const response = await fetch(
-        `https://spendwise-client-default-rtdb.firebaseio.com/users/${hashCode}/transactions/${payload.id}.json`,
-        {
-          method: "PUT",
-          body: JSON.stringify(payload),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await fetch(`http://54.161.122.179:8080/updateTransaction`, {
+        method: "POST",
+        body: JSON.stringify(payload),
+        headers: {
+          "Content-Type": "application/json",
+          Authentication: getState().auth.token,
+        },
+      });
       if (!response.ok) {
         const error = await response.json();
         console.log(error);
@@ -31,7 +23,7 @@ const editTransactionAsync = createAsyncThunk(
       }
       const data = await response.json();
       console.log(data);
-      dispatch(editTransaction(data));
+      return true;
     } catch (error) {
       console.log(error);
     }

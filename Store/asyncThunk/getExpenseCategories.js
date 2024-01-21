@@ -5,7 +5,7 @@ const getExpenseCategories = createAsyncThunk(
   async function (payload, {dispatch, getState}) {
     try {
       const response = await fetch(
-        `http://localhost:8080/getExpenseCategories`,
+        `http://54.161.122.179:8080/getExpenseCategories`,
         {
           method: "GET",
           headers: {

@@ -30,7 +30,9 @@ const ReportList = (props) => {
                   <div
                     style={{ filter: dark && "invert(1)" }}
                     className={style.fileIcon}
-                  />
+                  >
+                    {/* <div className={style.fileName}>PDF</div> */}
+                  </div>
                 </div>
                 <div className={style.reportListItem_right}>
                   <span

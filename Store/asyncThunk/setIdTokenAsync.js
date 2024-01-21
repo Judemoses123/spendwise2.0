@@ -10,7 +10,7 @@ const setIdTokenAsync = createAsyncThunk(
       if (!token) {
         return false;
       }
-      const response = await fetch(`http://localhost:8080/checkTokenValidity`, {
+      const response = await fetch(`http://54.161.122.179:8080/checkTokenValidity`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

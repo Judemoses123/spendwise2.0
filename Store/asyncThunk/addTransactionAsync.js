@@ -13,14 +13,17 @@ const addTransactionAsync = createAsyncThunk(
       const email = getState().auth.email;
       const hashCode = createHash("sha1").update(email).digest("hex");
       console.log(hashCode);
-      const response = await fetch(`http://localhost:8080/addTransaction`, {
-        method: "POST",
-        body: JSON.stringify(payload),
-        headers: {
-          "Content-Type": "application/json",
-          Authentication: getState().auth.token,
-        },
-      });
+      const response = await fetch(
+        `http://54.161.122.179:8080/addTransaction`,
+        {
+          method: "POST",
+          body: JSON.stringify(payload),
+          headers: {
+            "Content-Type": "application/json",
+            Authentication: getState().auth.token,
+          },
+        }
+      );
       if (!response.ok) {
         const error = await response.json();
         console.log(error);

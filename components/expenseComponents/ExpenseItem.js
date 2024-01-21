@@ -7,6 +7,8 @@ import editTransactionAsync from "@/Store/asyncThunk/editTransactionAsync";
 import { useSelector } from "react-redux";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import removeTransactionsAsync from "../../Store/asyncThunk/removeTransactionsAsync";
+import DoneIcon from "@mui/icons-material/Done";
+import { Done } from "@mui/icons-material";
 const ExpenseItem = (props) => {
   const dark = useSelector((state) => state.theme.dark);
   const amountRef = useRef();
@@ -18,6 +20,7 @@ const ExpenseItem = (props) => {
   const editHandler = () => {
     setShowEditor((prev) => {
       if (prev === true) {
+        console.log(dateRef.current.value);
         const data = {
           amount: amountRef.current.value,
           description: descriptionRef.current.value,
@@ -27,7 +30,8 @@ const ExpenseItem = (props) => {
           category: categoryRef.current && categoryRef.current.value,
           source: sourceRef.current && sourceRef.current.value,
         };
-        console.log(data);
+        // console.log(data);
+        props.getData(data);
         dispatch(editTransactionAsync(data));
         hideOption();
         return false;
@@ -44,6 +48,7 @@ const ExpenseItem = (props) => {
   const [showOptions, setShowOptions] = useState(false);
 
   const toggleShowOptions = () => {
+    console.log(props);
     setShowOptions((prev) => !prev);
   };
   const showOption = () => {
@@ -94,7 +99,7 @@ const ExpenseItem = (props) => {
         {showEditor && (
           <>
             <input
-              defaultValue={props.date}
+              defaultValue={new Date(props.date).toISOString().substring(0, 10)}
               ref={dateRef}
               className={style.input}
               type="date"
@@ -162,14 +167,23 @@ const ExpenseItem = (props) => {
                   color: dark ? "white" : "black",
                 }}
               >
-                <span>Options</span>
+                {/* <span>Options</span> */}
                 <button
                   name="menu"
                   onClick={editHandler}
                   className={style.edit}
                 >
                   {showEditor ? (
-                    "Submit"
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "0.5rem",
+                        fontSize: "1rem",
+                      }}
+                    >
+                      <Done /> Submit
+                    </div>
                   ) : (
                     <div
                       style={{

@@ -15,6 +15,7 @@ import LineChart from "@/components/graphComponents/LineChart";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import BottomNavbar from "@/components/navigationComponents/BottomNavbar";
+import editTransactionAsync from "@/Store/asyncThunk/editTransactionAsync";
 
 const Home = () => {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
@@ -28,6 +29,24 @@ const Home = () => {
     (state) => state.transaction.transactions
   );
   const [transactions, setTransactions] = useState([]);
+  const getData = async (data) => {
+    console.log(data);
+    await dispatch(editTransactionAsync(data));
+    const resp = await dispatch(
+      getTransactionAsync({
+        type: "all",
+        sort: "recent",
+        duration: "all",
+        page: "1",
+        fetchOnly: true,
+        pagination: true,
+      })
+    );
+    if (resp.payload) {
+      console.log(resp);
+      setTransactions(resp.payload.transactions);
+    }
+  };
   useEffect(() => {
     try {
       async function validity() {
@@ -83,6 +102,7 @@ const Home = () => {
           )}
           {emailVerified && !!photoUrl && !!userName && (
             <Expenses
+              getData={getData}
               editable={true}
               mode="all"
               sort="date-recent"

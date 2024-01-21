@@ -20,10 +20,10 @@
   }
 }
 .edit {
-  background-color: #53e373;
+  background-color: transparent;
   border: 0;
   border-radius: 5px;
-  color: white;
+  color: #54e374;
   display: grid;
   place-items: center;
   padding: 5px;
@@ -31,17 +31,19 @@
   width: 100%;
   height: calc(100% - 10px);
   font-size: 1rem;
+  justify-content: start;
 }
 .delete {
-  background-color: #fa6467;
+  background-color: transparent;
   border: 0;
   border-radius: 5px;
-  color: white;
+  color: #fa696c;
   display: grid;
   place-items: center;
   padding: 5px;
   margin: 5px;
   width: 100%;
+  justify-content: start;
 }
 .filler {
   display: none;
@@ -77,7 +79,7 @@
 }
 .overlay {
   text-align: center;
-  width: 20vw;
+  width: 12vw;
   position: absolute;
   right: 1rem;
   top: 3rem;

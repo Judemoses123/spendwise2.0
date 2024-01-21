@@ -7,7 +7,7 @@ const toggleDarkAsync = createAsyncThunk(
   "transaction/toggleDarkAsync",
   async (payload, { dispatch, getState }) => {
     try {
-      const response = await fetch(`http://localhost:8080/toggleDark`, {
+      const response = await fetch(`http://54.161.122.179:8080/toggleDark`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

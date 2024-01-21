@@ -6,6 +6,11 @@ import style from "./Expenses.module.css";
 const Expenses = (props) => {
   const transactions = props.transactions;
   const dark = useSelector((state) => state.theme.dark);
+
+  function getData(data) {
+    // console.log(data);
+    props.getData(data);
+  }
   return (
     <>
       <div
@@ -19,6 +24,7 @@ const Expenses = (props) => {
           {transactions &&
             transactions.map((item) => (
               <ExpenseItem
+                getData={getData}
                 key={item.id}
                 amount={item.amount}
                 description={item.description}

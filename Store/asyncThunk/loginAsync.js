@@ -4,7 +4,7 @@ const loginAsync = createAsyncThunk(
   "auth/loginAsync",
   async (payload, { dispatch }) => {
     try {
-      const response = await fetch(`http://localhost:8080/loginUser`, {
+      const response = await fetch(`http://54.161.122.179:8080/loginUser`, {
         method: "POST",
         body: JSON.stringify({
           email: payload.email,

@@ -9,7 +9,7 @@ const PremiumBanner = (props) => {
   const [Razorpay] = useRazorpay();
   const token = useSelector((state) => state.auth.token);
   const handlePayment = async (params) => {
-    const response = await fetch(`http://localhost:8080/premiumPayment`, {
+    const response = await fetch(`http://54.161.122.179:8080/premiumPayment`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -29,7 +29,7 @@ const PremiumBanner = (props) => {
       handler: async function (response) {
         try {
           const resp = await fetch(
-            `http://localhost:8080/updatePaymentStatus`,
+            `http://54.161.122.179:8080/updatePaymentStatus`,
             {
               method: "POST",
               headers: {
@@ -74,7 +74,7 @@ const PremiumBanner = (props) => {
     rzp1.on("payment.failed", async function (response) {
       try {
         const failedResponse = await fetch(
-          `http://localhost:8080/paymentFailed`,
+          `http://54.161.122.179:8080/paymentFailed`,
           {
             method: "POST",
             headers: {
@@ -102,7 +102,7 @@ const PremiumBanner = (props) => {
     rzp1.on("payment.failed", async function (response) {
       try {
         const failedResponse = await fetch(
-          `http://localhost:8080/paymentFailed`,
+          `http://54.161.122.179:8080/paymentFailed`,
           {
             method: "POST",
             headers: {
@@ -125,85 +125,6 @@ const PremiumBanner = (props) => {
       }
     });
   };
-
-  //   async function initiatePayment(e) {
-  //     const token = localStorage.getItem("token");
-  //     const response = await fetch(`http://localhost:8080/premiumPayment`, {
-  //       method: "GET",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         Authentication: token,
-  //       },
-  //     });
-  //     if (!response.ok) {
-  //       throw new Error("get premium failed");
-  //     }
-  //     const data = await response.json();
-  //     console.log(data);
-  //     var options = {
-  //       key: data.key_id,
-  //       order_id: data.order.id,
-  //       handler: async function (response) {
-  //         try {
-  //           const resp = await fetch(
-  //             `http://localhost:8080/updatePaymentStatus`,
-  //             {
-  //               method: "POST",
-  //               headers: {
-  //                 "Content-Type": "application/json",
-  //                 Authentication: token,
-  //               },
-  //               body: JSON.stringify({
-  //                 order_id: options.order_id,
-  //                 payment_id: response.razorpay_payment_id,
-  //               }),
-  //             }
-  //           );
-  //           if (!resp.ok) {
-  //             throw new Error("Payment failed After Initialization");
-  //           }
-  //           const dt = await resp.json();
-  //           console.log(dt);
-  //           if (dt.status === "SUCCESS") {
-  //             alert("Congratulations! Premium Membership Activated.");
-  //           }
-  //         } catch (er) {
-  //           console.log(er);
-  //           alert("Something went wrong! please try again later");
-  //         }
-  //       },
-  //     };
-
-  //     const rzpl = new Razorpay(options);
-  //     rzpl.open();
-  //     e.preventDefault();
-
-  //     rzpl.on("payment.failed", async function (response) {
-  //       try {
-  //         const failedResponse = await fetch(
-  //           `http://localhost:8080/paymentFailed`,
-  //           {
-  //             method: "POST",
-  //             headers: {
-  //               "Content-Type": "application/json",
-  //               Authentication: token,
-  //             },
-  //             body: JSON.stringify({
-  //               order_id: options.order_id,
-  //               payment_id: response.razorpay_payment_id,
-  //             }),
-  //           }
-  //         );
-  //         if (!failedResponse.ok) {
-  //           throw new Error("failed Updating payment failure status");
-  //         }
-  //         const failedData = await failedResponse.json();
-  //         console.log(failedData);
-  //       } catch (failedErr) {
-  //         console.log(failedErr);
-  //       }
-  //     });
-  //   }
 
   return (
     <div className={style.premiumModalBackground}>

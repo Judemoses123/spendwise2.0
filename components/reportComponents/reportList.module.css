@@ -44,7 +44,7 @@
 
 .fileIcon {
   background-image: url("../../images/icons8-file-128.svg");
-  opacity: 0.5;
+  /* opacity: 0.5; */
   width: 3rem;
   background-size: contain;
   height: 3rem;
@@ -54,4 +54,15 @@
 .reportListItem_right {
   display: flex;
   flex-direction: column;
+}
+.fileName {
+  width: 3rem;
+  height: 3rem;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: black;
+  opacity: 1 !important;
+  backdrop-filter: opacity(0.5);
 }
