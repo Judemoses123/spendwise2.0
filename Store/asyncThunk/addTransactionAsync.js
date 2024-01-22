@@ -14,7 +14,7 @@ const addTransactionAsync = createAsyncThunk(
       const hashCode = createHash("sha1").update(email).digest("hex");
       console.log(hashCode);
       const response = await fetch(
-        `http://54.161.122.179/addTransaction`,
+        `http://35.170.112.218/addTransaction`,
         {
           method: "POST",
           body: JSON.stringify(payload),

@@ -4,7 +4,7 @@ const resetPasswordAsync = createAsyncThunk(
   "auth/resetPasswordAsync",
   async (payload, { dispatch, getState }) => {
     try {
-      const response = await fetch(`http://54.161.122.179/forgotPassword`, {
+      const response = await fetch(`http://35.170.112.218/forgotPassword`, {
         method: "POST",
         body: JSON.stringify({
           email: payload,

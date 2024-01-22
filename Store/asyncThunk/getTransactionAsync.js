@@ -11,7 +11,7 @@ const getTransactionAsync = createAsyncThunk(
     if (!!username) {
       try {
         const response = await fetch(
-          `http://54.161.122.179/getTransactions/${payload.type}/${payload.sort}/${payload.duration}/${payload.page}/${payload.pagination}/${rpp}`,
+          `http://35.170.112.218/getTransactions/${payload.type}/${payload.sort}/${payload.duration}/${payload.page}/${payload.pagination}/${rpp}`,
           {
             method: "GET",
             headers: {

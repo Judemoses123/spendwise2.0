@@ -5,7 +5,7 @@ const signupAsync = createAsyncThunk(
   "auth/signupAsync",
   async (payload, { dispatch }) => {
     try {
-      const response = await fetch(`http://54.161.122.179/signupUser`, {
+      const response = await fetch(`http://35.170.112.218/signupUser`, {
         method: "POST",
         body: JSON.stringify({
           email: payload.email,

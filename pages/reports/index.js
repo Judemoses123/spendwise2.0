@@ -122,7 +122,7 @@ const Reports = () => {
   //getPreviousReports
   const getReports = async () => {
     try {
-      const response = await fetch(`http://54.161.122.179/getReports`, {
+      const response = await fetch(`http://35.170.112.218/getReports`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

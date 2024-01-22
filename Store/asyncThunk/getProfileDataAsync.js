@@ -7,7 +7,7 @@ const getProfileDataAsync = createAsyncThunk(
   async (payload, { dispatch, getState }) => {
     try {
       const token = getState().auth.token;
-      const response = await fetch(`http://54.161.122.179/getUser`, {
+      const response = await fetch(`http://35.170.112.218/getUser`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

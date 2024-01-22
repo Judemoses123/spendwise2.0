@@ -8,7 +8,7 @@ const verifyEmailCode = createAsyncThunk(
     try {
       const otp = payload.otp;
       const email = getState().auth.email;
-      const response = await fetch(`http://54.161.122.179/verifyEmailCode`, {
+      const response = await fetch(`http://35.170.112.218/verifyEmailCode`, {
         method: "POST",
         body: JSON.stringify({ otp, email }),
         headers: {

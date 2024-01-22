@@ -12,7 +12,7 @@ const verifyAsync = createAsyncThunk(
         email,
       };
       console.log(verifyBody);
-      const response = await fetch(`http://54.161.122.179/verifyEmail`, {
+      const response = await fetch(`http://35.170.112.218/verifyEmail`, {
         method: "POST",
         body: JSON.stringify(verifyBody),
         headers: {

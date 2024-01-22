@@ -4,7 +4,7 @@ const updatePassword = createAsyncThunk(
   "auth/updatePassword",
   async (payload, { dispatch, getState }) => {
     try {
-      const response = await fetch(`http://54.161.122.179/updatePassword`, {
+      const response = await fetch(`http://35.170.112.218/updatePassword`, {
         method: "POST",
         body: JSON.stringify(payload),
         headers: {
