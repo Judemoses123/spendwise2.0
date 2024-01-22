@@ -8,7 +8,7 @@ const editTransactionAsync = createAsyncThunk(
   async (payload, { dispatch, getState }) => {
     try {
       console.log(payload);
-      const response = await fetch(`http://54.161.122.179:8080/updateTransaction`, {
+      const response = await fetch(`http://54.161.122.179/updateTransaction`, {
         method: "POST",
         body: JSON.stringify(payload),
         headers: {

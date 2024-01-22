@@ -12,7 +12,7 @@ const updateAsync = createAsyncThunk(
         photoUrl: payload.photoUrl,
       };
       console.log(updateBody);
-      const response = await fetch(`http://54.161.122.179:8080/updateUser`, {
+      const response = await fetch(`http://54.161.122.179/updateUser`, {
         method: "POST",
         body: JSON.stringify(updateBody),
         headers: {

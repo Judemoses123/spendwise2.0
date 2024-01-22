@@ -9,7 +9,7 @@ const PremiumBanner = (props) => {
   const [Razorpay] = useRazorpay();
   const token = useSelector((state) => state.auth.token);
   const handlePayment = async (params) => {
-    const response = await fetch(`http://54.161.122.179:8080/premiumPayment`, {
+    const response = await fetch(`http://54.161.122.179/premiumPayment`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -29,7 +29,7 @@ const PremiumBanner = (props) => {
       handler: async function (response) {
         try {
           const resp = await fetch(
-            `http://54.161.122.179:8080/updatePaymentStatus`,
+            `http://54.161.122.179/updatePaymentStatus`,
             {
               method: "POST",
               headers: {
@@ -74,7 +74,7 @@ const PremiumBanner = (props) => {
     rzp1.on("payment.failed", async function (response) {
       try {
         const failedResponse = await fetch(
-          `http://54.161.122.179:8080/paymentFailed`,
+          `http://54.161.122.179/paymentFailed`,
           {
             method: "POST",
             headers: {
@@ -102,7 +102,7 @@ const PremiumBanner = (props) => {
     rzp1.on("payment.failed", async function (response) {
       try {
         const failedResponse = await fetch(
-          `http://54.161.122.179:8080/paymentFailed`,
+          `http://54.161.122.179/paymentFailed`,
           {
             method: "POST",
             headers: {

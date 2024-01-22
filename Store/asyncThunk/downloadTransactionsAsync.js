@@ -5,7 +5,7 @@ const downloadTransactionsAsync = createAsyncThunk(
   async (payload, { dispatch, getState }) => {
     try {
       const response = await fetch(
-        `http://54.161.122.179:8080/downloadTransactions`,
+        `http://54.161.122.179/downloadTransactions`,
         {
           method: "POST",
           body: JSON.stringify(payload),

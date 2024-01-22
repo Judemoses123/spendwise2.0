@@ -5,7 +5,7 @@ const getFinancialHealthScore = createAsyncThunk(
   async function (payload, { dispatch, getState }) {
     try {
       const response = await fetch(
-        `http://54.161.122.179:8080/getFinancialHealthScore`,
+        `http://54.161.122.179/getFinancialHealthScore`,
         {
           method: "GET",
           headers: {
